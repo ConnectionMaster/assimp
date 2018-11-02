@@ -502,7 +502,7 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
     {
         // ***** REFERENCE TO ANOTHER SKIN INDEX *****
         int referrer = (int)iWidth;
-        pcMatOut->AddProperty<int>(&referrer,1,AI_MDL7_REFERRER_MATERIAL);
+        pcMatOut->AddProperty(&referrer,1,AI_MDL7_REFERRER_MATERIAL);
     }
     else if (0x6 == iMasked)
     {
@@ -620,7 +620,7 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
         clrTemp.b = pcMatIn->Diffuse.b;
         AI_SWAP4(clrTemp.b);
         COLOR_MULTIPLY_RGB();
-        pcMatOut->AddProperty<aiColor3D>(&clrTemp,1,AI_MATKEY_COLOR_DIFFUSE);
+        pcMatOut->AddProperty(&clrTemp,1,AI_MATKEY_COLOR_DIFFUSE);
 
         // read specular color
         clrTemp.r = pcMatIn->Specular.r;
@@ -630,7 +630,7 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
         clrTemp.b = pcMatIn->Specular.b;
         AI_SWAP4(clrTemp.b);
         COLOR_MULTIPLY_RGB();
-        pcMatOut->AddProperty<aiColor3D>(&clrTemp,1,AI_MATKEY_COLOR_SPECULAR);
+        pcMatOut->AddProperty(&clrTemp,1,AI_MATKEY_COLOR_SPECULAR);
 
         // read ambient color
         clrTemp.r = pcMatIn->Ambient.r;
@@ -640,7 +640,7 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
         clrTemp.b = pcMatIn->Ambient.b;
         AI_SWAP4(clrTemp.b);
         COLOR_MULTIPLY_RGB();
-        pcMatOut->AddProperty<aiColor3D>(&clrTemp,1,AI_MATKEY_COLOR_AMBIENT);
+        pcMatOut->AddProperty(&clrTemp,1,AI_MATKEY_COLOR_AMBIENT);
 
         // read emissive color
         clrTemp.r = pcMatIn->Emissive.r;
@@ -649,7 +649,7 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
         AI_SWAP4(clrTemp.g);
         clrTemp.b = pcMatIn->Emissive.b;
         AI_SWAP4(clrTemp.b);
-        pcMatOut->AddProperty<aiColor3D>(&clrTemp,1,AI_MATKEY_COLOR_EMISSIVE);
+        pcMatOut->AddProperty(&clrTemp,1,AI_MATKEY_COLOR_EMISSIVE);
 
 #undef COLOR_MULITPLY_RGB
 
@@ -661,7 +661,7 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
         if (is_not_qnan(clrTexture.r)) {
             clrTemp.r *= clrTexture.a;
         }
-        pcMatOut->AddProperty<ai_real>(&clrTemp.r,1,AI_MATKEY_OPACITY);
+        pcMatOut->AddProperty(&clrTemp.r,1,AI_MATKEY_OPACITY);
 
         // read phong power
         int iShadingMode = (int)aiShadingMode_Gouraud;
@@ -671,14 +671,14 @@ void MDLImporter::ParseSkinLump_3DGS_MDL7(
             iShadingMode = (int)aiShadingMode_Phong;
             // pcMatIn is packed, we can't form pointers to its members
             float power = pcMatIn->Power;
-            pcMatOut->AddProperty<float>(&power,1,AI_MATKEY_SHININESS);
+            pcMatOut->AddProperty(&power,1,AI_MATKEY_SHININESS);
         }
-        pcMatOut->AddProperty<int>(&iShadingMode,1,AI_MATKEY_SHADING_MODEL);
+        pcMatOut->AddProperty(&iShadingMode,1,AI_MATKEY_SHADING_MODEL);
     }
     else if (is_not_qnan(clrTexture.r))
     {
-        pcMatOut->AddProperty<aiColor4D>(&clrTexture,1,AI_MATKEY_COLOR_DIFFUSE);
-        pcMatOut->AddProperty<aiColor4D>(&clrTexture,1,AI_MATKEY_COLOR_SPECULAR);
+        pcMatOut->AddProperty(&clrTexture,1,AI_MATKEY_COLOR_DIFFUSE);
+        pcMatOut->AddProperty(&clrTexture,1,AI_MATKEY_COLOR_SPECULAR);
     }
     // if the texture could be replaced by a single material color
     // we don't need the texture anymore

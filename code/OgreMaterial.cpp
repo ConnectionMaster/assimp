@@ -280,13 +280,13 @@ aiMaterial* OgreImporter::ReadMaterial(const std::string &pFile, Assimp::IOSyste
                 {
                     ss >> linePart;
                     aiString ts(linePart);
-                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0));
+                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE(), 0));
                 }
                 else if (linePart=="$normalmap")
                 {
                     ss >> linePart;
                     aiString ts(linePart);
-                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0));
+                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_NORMALS(), 0));
                 }
                 else if (linePart=="$shininess_strength")
                 {
@@ -307,7 +307,7 @@ aiMaterial* OgreImporter::ReadMaterial(const std::string &pFile, Assimp::IOSyste
                     if (linePart[0] == '"')// "file" -> file
                         linePart = linePart.substr(1, linePart.size()-2);
                     aiString ts(linePart);
-                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0));
+                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE(), 0));
                 }
                 else if (linePart=="$specular_map")
                 {
@@ -315,7 +315,7 @@ aiMaterial* OgreImporter::ReadMaterial(const std::string &pFile, Assimp::IOSyste
                     if (linePart[0] == '"')// "file" -> file
                         linePart = linePart.substr(1, linePart.size()-2);
                     aiString ts(linePart);
-                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_SHININESS, 0));
+                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_SHININESS(), 0));
                 }
                 else if (linePart=="$normal_map")
                 {
@@ -323,7 +323,7 @@ aiMaterial* OgreImporter::ReadMaterial(const std::string &pFile, Assimp::IOSyste
                     if (linePart[0]=='"')// "file" -> file
                         linePart = linePart.substr(1, linePart.size()-2);
                     aiString ts(linePart);
-                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0));
+                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_NORMALS(), 0));
                 }
                 else if (linePart=="$light_map")
                 {
@@ -332,7 +332,7 @@ aiMaterial* OgreImporter::ReadMaterial(const std::string &pFile, Assimp::IOSyste
                         linePart = linePart.substr(1, linePart.size() - 2);
                     }
                     aiString ts(linePart);
-                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0));
+                    material->AddProperty(&ts, AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP(), 0));
                 }
             }
         }
@@ -461,7 +461,7 @@ bool OgreImporter::ReadTextureUnit(const std::string &textureUnitName, stringstr
     const string partTextCoordSet = "tex_coord_set";
     const string partColorOp      = "colour_op";
 
-    aiTextureType textureType = aiTextureType_NONE;
+    aiTextureType textureType = aiTextureType_NONE();
     std::string textureRef;
     int uvCoord = 0;
 
@@ -494,28 +494,28 @@ bool OgreImporter::ReadTextureUnit(const std::string &textureUnitName, stringstr
 
                     if (identifier == "_n" || identifier == "_nrm" || identifier == "_nrml" || identifier == "_normal" || identifier == "_normals" || identifier == "_normalmap")
                     {
-                        textureType = aiTextureType_NORMALS;
+                        textureType = aiTextureType_NORMALS();
                     }
                     else if (identifier == "_s" || identifier == "_spec" || identifier == "_specular" || identifier == "_specularmap")
                     {
-                        textureType = aiTextureType_SPECULAR;
+                        textureType = aiTextureType_SPECULAR();
                     }
                     else if (identifier == "_l" || identifier == "_light" || identifier == "_lightmap" || identifier == "_occ" || identifier == "_occlusion")
                     {
-                        textureType = aiTextureType_LIGHTMAP;
+                        textureType = aiTextureType_LIGHTMAP();
                     }
                     else if (identifier == "_disp" || identifier == "_displacement")
                     {
-                        textureType = aiTextureType_DISPLACEMENT;
+                        textureType = aiTextureType_DISPLACEMENT();
                     }
                     else
                     {
-                        textureType = aiTextureType_DIFFUSE;
+                        textureType = aiTextureType_DIFFUSE();
                     }
                 }
                 else
                 {
-                    textureType = aiTextureType_DIFFUSE;
+                    textureType = aiTextureType_DIFFUSE();
                 }
             }
             // Detect from texture unit name. This cannot be too broad as
@@ -525,23 +525,23 @@ bool OgreImporter::ReadTextureUnit(const std::string &textureUnitName, stringstr
                 string unitNameLower = Ogre::ToLower(textureUnitName);
                 if (unitNameLower.find("normalmap") != string::npos)
                 {
-                    textureType = aiTextureType_NORMALS;
+                    textureType = aiTextureType_NORMALS();
                 }
                 else if (unitNameLower.find("specularmap") != string::npos)
                 {
-                    textureType = aiTextureType_SPECULAR;
+                    textureType = aiTextureType_SPECULAR();
                 }
                 else if (unitNameLower.find("lightmap") != string::npos)
                 {
-                    textureType = aiTextureType_LIGHTMAP;
+                    textureType = aiTextureType_LIGHTMAP();
                 }
                 else if (unitNameLower.find("displacementmap") != string::npos)
                 {
-                    textureType = aiTextureType_DISPLACEMENT;
+                    textureType = aiTextureType_DISPLACEMENT();
                 }
                 else
                 {
-                    textureType = aiTextureType_DIFFUSE;
+                    textureType = aiTextureType_DIFFUSE();
                 }
             }
         }
@@ -571,7 +571,7 @@ bool OgreImporter::ReadTextureUnit(const std::string &textureUnitName, stringstr
         ASSIMP_LOG_WARN("Texture reference is empty, ignoring texture_unit.");
         return false;
     }
-    if (textureType == aiTextureType_NONE)
+    if (strcmp(textureType, aiTextureType_NONE()) == 0)
     {
         ASSIMP_LOG_WARN("Failed to detect texture type for '" + textureRef  + "', ignoring texture_unit.");
         return false;

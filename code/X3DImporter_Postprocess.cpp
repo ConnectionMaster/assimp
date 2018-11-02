@@ -737,7 +737,7 @@ void X3DImporter::Postprocess_BuildShape(const CX3DImporter_NodeElement_Shape& p
 	{
 		tmesh->mMaterialIndex = mat_ind;
 		// Check texture mapping. If material has texture but mesh has no texture coordinate then try to ask Assimp to generate texture coordinates.
-		if((tmat->GetTextureCount(aiTextureType_DIFFUSE) != 0) && !tmesh->HasTextureCoords(0))
+		if((tmat->GetTextureCount(aiTextureType_DIFFUSE()) != 0) && !tmesh->HasTextureCoords(0))
 		{
 			int32_t tm;
 			aiVector3D tvec3;
@@ -760,7 +760,7 @@ void X3DImporter::Postprocess_BuildShape(const CX3DImporter_NodeElement_Shape& p
 			}// switch(mesh_type)
 
 			tmat->AddProperty(&tm, 1, AI_MATKEY_MAPPING_DIFFUSE(0));
-		}// if((tmat->GetTextureCount(aiTextureType_DIFFUSE) != 0) && !tmesh->HasTextureCoords(0))
+		}// if((tmat->GetTextureCount(aiTextureType_DIFFUSE()) != 0) && !tmesh->HasTextureCoords(0))
 	}// if((tmesh != nullptr) && (tmat != nullptr))
 }
 

@@ -682,15 +682,15 @@ void SMDImporter::CreateOutputMaterials()
         pScene->mMaterials[0] = pcHelper;
 
         int iMode = (int)aiShadingMode_Gouraud;
-        pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+        pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
         aiColor3D clr;
         clr.b = clr.g = clr.r = 0.7f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
         clr.b = clr.g = clr.r = 0.05f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 
         aiString szName;
         szName.Set(AI_DEFAULT_MATERIAL_NAME);

@@ -357,13 +357,13 @@ void Discreet3DSExporter::WriteMaterials()
             writer.PutI2(1);
         }
 
-        WriteTexture(mat, aiTextureType_DIFFUSE, Discreet3DS::CHUNK_MAT_TEXTURE);
-        WriteTexture(mat, aiTextureType_HEIGHT, Discreet3DS::CHUNK_MAT_BUMPMAP);
-        WriteTexture(mat, aiTextureType_OPACITY, Discreet3DS::CHUNK_MAT_OPACMAP);
-        WriteTexture(mat, aiTextureType_SHININESS, Discreet3DS::CHUNK_MAT_MAT_SHINMAP);
-        WriteTexture(mat, aiTextureType_SPECULAR, Discreet3DS::CHUNK_MAT_SPECMAP);
-        WriteTexture(mat, aiTextureType_EMISSIVE, Discreet3DS::CHUNK_MAT_SELFIMAP);
-        WriteTexture(mat, aiTextureType_REFLECTION, Discreet3DS::CHUNK_MAT_REFLMAP);
+        WriteTexture(mat, aiTextureType_DIFFUSE(), Discreet3DS::CHUNK_MAT_TEXTURE);
+        WriteTexture(mat, aiTextureType_HEIGHT(), Discreet3DS::CHUNK_MAT_BUMPMAP);
+        WriteTexture(mat, aiTextureType_OPACITY(), Discreet3DS::CHUNK_MAT_OPACMAP);
+        WriteTexture(mat, aiTextureType_SHININESS(), Discreet3DS::CHUNK_MAT_MAT_SHINMAP);
+        WriteTexture(mat, aiTextureType_SPECULAR(), Discreet3DS::CHUNK_MAT_SPECMAP);
+        WriteTexture(mat, aiTextureType_EMISSIVE(), Discreet3DS::CHUNK_MAT_SELFIMAP);
+        WriteTexture(mat, aiTextureType_REFLECTION(), Discreet3DS::CHUNK_MAT_REFLMAP);
     }
 }
 

@@ -505,12 +505,10 @@ size_t count_images(const aiScene* scene) {
     aiString texpath;
     for (size_t i = 0; i < scene->mNumMaterials; ++i) {
         aiMaterial* mat = scene->mMaterials[i];
-        for (
-            size_t tt = aiTextureType_DIFFUSE;
-            tt < aiTextureType_UNKNOWN;
-            ++tt
-        ){
-            const aiTextureType textype = static_cast<aiTextureType>(tt);
+        for (unsigned int k = 0; k < mat->mNumProperties; ++k) {
+            aiMaterialProperty* prop = mat->mProperties[k];
+            aiTextureType textype = prop->mSemantic.data;
+
             const size_t texcount = mat->GetTextureCount(textype);
             for (unsigned int j = 0; j < texcount; ++j) {
                 mat->GetTexture(textype, j, &texpath);
@@ -525,11 +523,10 @@ size_t count_textures(const aiScene* scene) {
     size_t count = 0;
     for (size_t i = 0; i < scene->mNumMaterials; ++i) {
         aiMaterial* mat = scene->mMaterials[i];
-        for (
-            size_t tt = aiTextureType_DIFFUSE;
-            tt < aiTextureType_UNKNOWN;
-            ++tt
-        ){
+        for (unsigned int j = 0; j < mat->mNumProperties; ++j) {
+            aiMaterialProperty* prop = mat->mProperties[j];
+            aiTextureType tt = prop->mSemantic.data;
+
             // TODO: handle layered textures
             if (mat->GetTextureCount(static_cast<aiTextureType>(tt)) > 0) {
                 count += 1;
@@ -1371,12 +1368,10 @@ void FBXExporter::WriteObjects ()
     for (size_t i = 0; i < mScene->mNumMaterials; ++i) {
         aiString texpath;
         aiMaterial* mat = mScene->mMaterials[i];
-        for (
-            size_t tt = aiTextureType_DIFFUSE;
-            tt < aiTextureType_UNKNOWN;
-            ++tt
-        ){
-            const aiTextureType textype = static_cast<aiTextureType>(tt);
+        for (unsigned int k = 0; k < mat->mNumProperties; ++k) {
+            aiMaterialProperty* prop = mat->mProperties[k];
+            aiTextureType textype = prop->mSemantic.data;
+
             const size_t texcount = mat->GetTextureCount(textype);
             for (size_t j = 0; j < texcount; ++j) {
                 mat->GetTexture(textype, (unsigned int)j, &texpath);
@@ -1417,30 +1412,28 @@ void FBXExporter::WriteObjects ()
     // referenced by material_index/texture_type pairs.
     std::map<std::pair<size_t,size_t>,int64_t> texture_uids;
     const std::map<aiTextureType,std::string> prop_name_by_tt = {
-        {aiTextureType_DIFFUSE, "DiffuseColor"},
-        {aiTextureType_SPECULAR, "SpecularColor"},
-        {aiTextureType_AMBIENT, "AmbientColor"},
-        {aiTextureType_EMISSIVE, "EmissiveColor"},
-        {aiTextureType_HEIGHT, "Bump"},
-        {aiTextureType_NORMALS, "NormalMap"},
-        {aiTextureType_SHININESS, "ShininessExponent"},
-        {aiTextureType_OPACITY, "TransparentColor"},
-        {aiTextureType_DISPLACEMENT, "DisplacementColor"},
-        //{aiTextureType_LIGHTMAP, "???"},
-        {aiTextureType_REFLECTION, "ReflectionColor"}
-        //{aiTextureType_UNKNOWN, ""}
+        {aiTextureType_DIFFUSE(), "DiffuseColor"},
+        {aiTextureType_SPECULAR(), "SpecularColor"},
+        {aiTextureType_AMBIENT(), "AmbientColor"},
+        {aiTextureType_EMISSIVE(), "EmissiveColor"},
+        {aiTextureType_HEIGHT(), "Bump"},
+        {aiTextureType_NORMALS(), "NormalMap"},
+        {aiTextureType_SHININESS(), "ShininessExponent"},
+        {aiTextureType_OPACITY(), "TransparentColor"},
+        {aiTextureType_DISPLACEMENT(), "DisplacementColor"},
+        //{aiTextureType_LIGHTMAP(), "???"},
+        {aiTextureType_REFLECTION(), "ReflectionColor"}
+        //{aiTextureType_UNKNOWN(), ""}
     };
     for (size_t i = 0; i < mScene->mNumMaterials; ++i) {
         // textures are attached to materials
         aiMaterial* mat = mScene->mMaterials[i];
         int64_t material_uid = material_uids[i];
 
-        for (
-            size_t j = aiTextureType_DIFFUSE;
-            j < aiTextureType_UNKNOWN;
-            ++j
-        ) {
-            const aiTextureType tt = static_cast<aiTextureType>(j);
+        for (unsigned int j = 0; j < mat->mNumProperties; ++j) {
+            aiMaterialProperty* prop = mat->mProperties[j];
+            aiTextureType tt = prop->mSemantic.data;
+
             size_t n = mat->GetTextureCount(tt);
 
             if (n < 1) { // no texture of this type

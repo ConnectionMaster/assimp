@@ -344,7 +344,7 @@ private:
         const char *color = xmlReader->getAttributeValue( D3MF::XmlTag::basematerials_displaycolor.c_str() );
         aiColor4D diffuse;
         if ( parseColor( color, diffuse ) ) {
-            mat->AddProperty<aiColor4D>( &diffuse, 1, AI_MATKEY_COLOR_DIFFUSE );
+            mat->AddProperty( &diffuse, 1, AI_MATKEY_COLOR_DIFFUSE );
         }
 
     }

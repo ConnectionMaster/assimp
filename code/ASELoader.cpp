@@ -823,10 +823,10 @@ void CopyASETexture(aiMaterial& mat, ASE::Texture& texture, aiTextureType type)
 
     // Setup the texture blend factor
     if (is_not_qnan(texture.mTextureBlend))
-        mat.AddProperty<ai_real>( &texture.mTextureBlend, 1, AI_MATKEY_TEXBLEND(type,0));
+        mat.AddProperty( &texture.mTextureBlend, 1, AI_MATKEY_TEXBLEND(type,0));
 
     // Setup texture UV transformations
-    mat.AddProperty<ai_real>(&texture.mOffsetU,5,AI_MATKEY_UVTRANSFORM(type,0));
+    mat.AddProperty(&texture.mOffsetU,5,AI_MATKEY_UVTRANSFORM(type,0));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -869,13 +869,13 @@ void ASEImporter::ConvertMaterial(ASE::Material& mat)
     }
 
     // opacity
-    mat.pcInstance->AddProperty<ai_real>( &mat.mTransparency,1,AI_MATKEY_OPACITY);
+    mat.pcInstance->AddProperty( &mat.mTransparency,1,AI_MATKEY_OPACITY);
 
     // Two sided rendering?
     if (mat.mTwoSided)
     {
         int i = 1;
-        mat.pcInstance->AddProperty<int>(&i,1,AI_MATKEY_TWOSIDED);
+        mat.pcInstance->AddProperty(&i,1,AI_MATKEY_TWOSIDED);
     }
 
     // shading mode
@@ -895,42 +895,42 @@ void ASEImporter::ConvertMaterial(ASE::Material& mat)
             {
                 // set the wireframe flag
                 unsigned int iWire = 1;
-                mat.pcInstance->AddProperty<int>( (int*)&iWire,1,AI_MATKEY_ENABLE_WIREFRAME);
+                mat.pcInstance->AddProperty( (int*)&iWire,1,AI_MATKEY_ENABLE_WIREFRAME);
             }
         case D3DS::Discreet3DS::Gouraud:
             eShading = aiShadingMode_Gouraud; break;
         case D3DS::Discreet3DS::Metal :
             eShading = aiShadingMode_CookTorrance; break;
     }
-    mat.pcInstance->AddProperty<int>( (int*)&eShading,1,AI_MATKEY_SHADING_MODEL);
+    mat.pcInstance->AddProperty( (int*)&eShading,1,AI_MATKEY_SHADING_MODEL);
 
     // DIFFUSE texture
     if( mat.sTexDiffuse.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexDiffuse, aiTextureType_DIFFUSE);
+        CopyASETexture(*mat.pcInstance,mat.sTexDiffuse, aiTextureType_DIFFUSE());
 
     // SPECULAR texture
     if( mat.sTexSpecular.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexSpecular, aiTextureType_SPECULAR);
+        CopyASETexture(*mat.pcInstance,mat.sTexSpecular, aiTextureType_SPECULAR());
 
     // AMBIENT texture
     if( mat.sTexAmbient.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexAmbient, aiTextureType_AMBIENT);
+        CopyASETexture(*mat.pcInstance,mat.sTexAmbient, aiTextureType_AMBIENT());
 
     // OPACITY texture
     if( mat.sTexOpacity.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexOpacity, aiTextureType_OPACITY);
+        CopyASETexture(*mat.pcInstance,mat.sTexOpacity, aiTextureType_OPACITY());
 
     // EMISSIVE texture
     if( mat.sTexEmissive.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexEmissive, aiTextureType_EMISSIVE);
+        CopyASETexture(*mat.pcInstance,mat.sTexEmissive, aiTextureType_EMISSIVE());
 
     // BUMP texture
     if( mat.sTexBump.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexBump, aiTextureType_HEIGHT);
+        CopyASETexture(*mat.pcInstance,mat.sTexBump, aiTextureType_HEIGHT());
 
     // SHININESS texture
     if( mat.sTexShininess.mMapName.length() > 0)
-        CopyASETexture(*mat.pcInstance,mat.sTexShininess, aiTextureType_SHININESS);
+        CopyASETexture(*mat.pcInstance,mat.sTexShininess, aiTextureType_SHININESS());
 
     // store the name of the material itself, too
     if( mat.mName.length() > 0) {

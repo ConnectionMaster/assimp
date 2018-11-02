@@ -168,7 +168,7 @@ namespace Blender {
         unsigned int sentinel_cnt;
 
         // next texture ID for each texture type, respectively
-        unsigned int next_texture[aiTextureType_UNKNOWN+1];
+        std::map<aiTextureType, unsigned int> next_texture;
 
         // original file data
         const FileDatabase& db;

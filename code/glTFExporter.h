@@ -102,7 +102,7 @@ namespace Assimp
         void WriteBinaryData(IOStream* outfile, std::size_t sceneLength);
 
         void GetTexSampler(const aiMaterial* mat, glTF::TexProperty& prop);
-        void GetMatColorOrTex(const aiMaterial* mat, glTF::TexProperty& prop, const char* propName, int type, int idx, aiTextureType tt);
+        void GetMatColorOrTex(const aiMaterial* mat, glTF::TexProperty& prop, const char* propName, const char *type, int idx, aiTextureType tt);
         void ExportMetadata();
         void ExportMaterials();
         void ExportMeshes();

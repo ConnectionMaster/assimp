@@ -347,8 +347,7 @@ void WriteDump(const aiScene* scene, IOStream* io, bool shortened) {
                 }
 
                 ioprintf(io,"\t\t\t<MatProperty key=\"%s\" \n\t\t\ttype=\"%s\" tex_usage=\"%s\" tex_index=\"%i\"",
-                    prop->mKey.data, sz,
-                    ::TextureTypeToString((aiTextureType)prop->mSemantic),prop->mIndex);
+                    prop->mKey.data, sz, prop->mSemantic,prop->mIndex);
 
                 if (prop->mType == aiPTI_Float) {
                     ioprintf(io," size=\"%i\">\n\t\t\t\t",

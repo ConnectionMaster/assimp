@@ -69,7 +69,7 @@ struct TTUpdateInfo {
     TTUpdateInfo() AI_NO_EXCEPT
     : directShortcut(nullptr)
     , mat(nullptr)
-    , semantic(0)
+    , semantic("")
     , index(0) {
         // empty
     }
@@ -81,7 +81,8 @@ struct TTUpdateInfo {
     aiMaterial *mat;
 
     //! Texture type and index
-    unsigned int semantic, index;
+    C_STRUCT aiString semantic;
+    unsigned int index;
 };
 
 

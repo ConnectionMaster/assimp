@@ -469,18 +469,18 @@ void MDCImporter::InternReadFile(
         const std::string& name = aszShaders[i];
 
         int iMode = (int)aiShadingMode_Gouraud;
-        pcMat->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+        pcMat->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
         // add a small ambient color value - RtCW seems to have one
         aiColor3D clr;
         clr.b = clr.g = clr.r = 0.05f;
-        pcMat->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+        pcMat->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 
         if (name.length())clr.b = clr.g = clr.r = 1.0f;
         else clr.b = clr.g = clr.r = 0.6f;
 
-        pcMat->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-        pcMat->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+        pcMat->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+        pcMat->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
         if (name.length())
         {

@@ -535,7 +535,7 @@ void MDLImporter::SetupMaterialProperties_3DGS_MDL5_Quake1( )
     // setup the material's properties
     const int iMode = (int)aiShadingMode_Gouraud;
     aiMaterial* const pcHelper = (aiMaterial*)pScene->mMaterials[0];
-    pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+    pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
     aiColor4D clr;
     if (0 != pcHeader->num_skins && pScene->mNumTextures)   {
@@ -557,12 +557,12 @@ void MDLImporter::SetupMaterialProperties_3DGS_MDL5_Quake1( )
         }
     }
 
-    pcHelper->AddProperty<aiColor4D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-    pcHelper->AddProperty<aiColor4D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+    pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+    pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
     clr.r *= 0.05f;clr.g *= 0.05f;
     clr.b *= 0.05f;clr.a  = 1.0f;
-    pcHelper->AddProperty<aiColor4D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+    pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -1438,15 +1438,15 @@ void MDLImporter::InternReadFile_3DGS_MDL7( )
             const int iMode = (int)aiShadingMode_Gouraud;
             sharedData.pcMats.push_back(new aiMaterial());
             aiMaterial* pcHelper = (aiMaterial*)sharedData.pcMats[0];
-            pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+            pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
             aiColor3D clr;
             clr.b = clr.g = clr.r = 0.6f;
-            pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-            pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+            pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+            pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
             clr.b = clr.g = clr.r = 0.05f;
-            pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+            pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 
             aiString szName;
             szName.Set(AI_DEFAULT_MATERIAL_NAME);
@@ -1951,14 +1951,14 @@ void MDLImporter::JoinSkins_3DGS_MDL7(
     aiMaterial::CopyPropertyList(pcMatOut,pcMat1);
 
     int iVal = 0;
-    pcMatOut->AddProperty<int>(&iVal,1,AI_MATKEY_UVWSRC_DIFFUSE(0));
+    pcMatOut->AddProperty(&iVal,1,AI_MATKEY_UVWSRC_DIFFUSE(0));
 
     // then extract the diffuse texture from the second skin,
     // setup 1 as UV source and we have it
     aiString sString;
     if(AI_SUCCESS == aiGetMaterialString ( pcMat2, AI_MATKEY_TEXTURE_DIFFUSE(0),&sString )) {
         iVal = 1;
-        pcMatOut->AddProperty<int>(&iVal,1,AI_MATKEY_UVWSRC_DIFFUSE(1));
+        pcMatOut->AddProperty(&iVal,1,AI_MATKEY_UVWSRC_DIFFUSE(1));
         pcMatOut->AddProperty(&sString,AI_MATKEY_TEXTURE_DIFFUSE(1));
     }
 }

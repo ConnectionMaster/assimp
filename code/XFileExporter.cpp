@@ -375,7 +375,7 @@ void XFileExporter::WriteMesh(aiMesh* mesh)
     {
         const aiMaterial* mat = mScene->mMaterials[mesh->mMaterialIndex];
         aiString relpath;
-        mat->Get(_AI_MATKEY_TEXTURE_BASE, aiTextureType_DIFFUSE, 0, relpath);
+        mat->Get(_AI_MATKEY_TEXTURE_BASE, aiTextureType_DIFFUSE(), 0, relpath);
 
         mOutput << startstr << "MeshMaterialList {" << endstr;
         PushTag();

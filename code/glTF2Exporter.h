@@ -103,8 +103,8 @@ namespace Assimp
         void GetMatTex(const aiMaterial* mat, glTF2::TextureInfo& prop, aiTextureType tt, unsigned int slot);
         void GetMatTex(const aiMaterial* mat, glTF2::NormalTextureInfo& prop, aiTextureType tt, unsigned int slot);
         void GetMatTex(const aiMaterial* mat, glTF2::OcclusionTextureInfo& prop, aiTextureType tt, unsigned int slot);
-        aiReturn GetMatColor(const aiMaterial* mat, glTF2::vec4& prop, const char* propName, int type, int idx);
-        aiReturn GetMatColor(const aiMaterial* mat, glTF2::vec3& prop, const char* propName, int type, int idx);
+        aiReturn GetMatColor(const aiMaterial* mat, glTF2::vec4& prop, const char* propName, aiTextureType type, int idx);
+        aiReturn GetMatColor(const aiMaterial* mat, glTF2::vec3& prop, const char* propName, aiTextureType type, int idx);
         void ExportMetadata();
         void ExportMaterials();
         void ExportMeshes();

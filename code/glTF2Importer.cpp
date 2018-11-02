@@ -179,14 +179,14 @@ static void CopyValue(const glTF2::mat4& v, aiMatrix4x4& o)
     o.a4 = v[12]; o.b4 = v[13]; o.c4 = v[14]; o.d4 = v[15];
 }
 
-inline void SetMaterialColorProperty(Asset& /*r*/, vec4& prop, aiMaterial* mat, const char* pKey, unsigned int type, unsigned int idx)
+inline void SetMaterialColorProperty(Asset& /*r*/, vec4& prop, aiMaterial* mat, const char* pKey, const char* type, unsigned int idx)
 {
     aiColor4D col;
     CopyValue(prop, col);
     mat->AddProperty(&col, 1, pKey, type, idx);
 }
 
-inline void SetMaterialColorProperty(Asset& /*r*/, vec3& prop, aiMaterial* mat, const char* pKey, unsigned int type, unsigned int idx)
+inline void SetMaterialColorProperty(Asset& /*r*/, vec3& prop, aiMaterial* mat, const char* pKey, const char* type, unsigned int idx)
 {
     aiColor4D col;
     CopyValue(prop, col);
@@ -223,11 +223,11 @@ inline void SetMaterialTextureProperty(std::vector<int>& embeddedTexIdxs, Asset&
             mat->AddProperty(&wrapT, 1, AI_MATKEY_MAPPINGMODE_V(texType, texSlot));
 
             if (sampler->magFilter != SamplerMagFilter::UNSET) {
-                mat->AddProperty(&sampler->magFilter, 1, AI_MATKEY_GLTF_MAPPINGFILTER_MAG(texType, texSlot));
+                mat->AddProperty((const int *)&sampler->magFilter, 1, AI_MATKEY_GLTF_MAPPINGFILTER_MAG(texType, texSlot));
             }
 
             if (sampler->minFilter != SamplerMinFilter::UNSET) {
-                mat->AddProperty(&sampler->minFilter, 1, AI_MATKEY_GLTF_MAPPINGFILTER_MIN(texType, texSlot));
+                mat->AddProperty((const int *)&sampler->minFilter, 1, AI_MATKEY_GLTF_MAPPINGFILTER_MIN(texType, texSlot));
             }
         }
     }
@@ -264,7 +264,7 @@ static aiMaterial* ImportMaterial(std::vector<int>& embeddedTexIdxs, Asset& r, M
     SetMaterialColorProperty(r, mat.pbrMetallicRoughness.baseColorFactor, aimat, AI_MATKEY_COLOR_DIFFUSE);
     SetMaterialColorProperty(r, mat.pbrMetallicRoughness.baseColorFactor, aimat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR);
 
-    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.pbrMetallicRoughness.baseColorTexture, aimat, aiTextureType_DIFFUSE);
+    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.pbrMetallicRoughness.baseColorTexture, aimat, aiTextureType_DIFFUSE());
     SetMaterialTextureProperty(embeddedTexIdxs, r, mat.pbrMetallicRoughness.baseColorTexture, aimat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE);
 
     SetMaterialTextureProperty(embeddedTexIdxs, r, mat.pbrMetallicRoughness.metallicRoughnessTexture, aimat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE);
@@ -276,9 +276,9 @@ static aiMaterial* ImportMaterial(std::vector<int>& embeddedTexIdxs, Asset& r, M
     roughnessAsShininess *= roughnessAsShininess * 1000;
     aimat->AddProperty(&roughnessAsShininess, 1, AI_MATKEY_SHININESS);
 
-    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.normalTexture, aimat, aiTextureType_NORMALS);
-    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.occlusionTexture, aimat, aiTextureType_LIGHTMAP);
-    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.emissiveTexture, aimat, aiTextureType_EMISSIVE);
+    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.normalTexture, aimat, aiTextureType_NORMALS());
+    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.occlusionTexture, aimat, aiTextureType_LIGHTMAP());
+    SetMaterialTextureProperty(embeddedTexIdxs, r, mat.emissiveTexture, aimat, aiTextureType_EMISSIVE());
     SetMaterialColorProperty(r, mat.emissiveFactor, aimat, AI_MATKEY_COLOR_EMISSIVE);
 
     aimat->AddProperty(&mat.doubleSided, 1, AI_MATKEY_TWOSIDED);
@@ -299,9 +299,9 @@ static aiMaterial* ImportMaterial(std::vector<int>& embeddedTexIdxs, Asset& r, M
         aimat->AddProperty(&glossinessAsShininess, 1, AI_MATKEY_SHININESS);
         aimat->AddProperty(&pbrSG.glossinessFactor, 1, AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR);
 
-        SetMaterialTextureProperty(embeddedTexIdxs, r, pbrSG.diffuseTexture, aimat, aiTextureType_DIFFUSE);
+        SetMaterialTextureProperty(embeddedTexIdxs, r, pbrSG.diffuseTexture, aimat, aiTextureType_DIFFUSE());
 
-        SetMaterialTextureProperty(embeddedTexIdxs, r, pbrSG.specularGlossinessTexture, aimat, aiTextureType_SPECULAR);
+        SetMaterialTextureProperty(embeddedTexIdxs, r, pbrSG.specularGlossinessTexture, aimat, aiTextureType_SPECULAR());
     }
     if (mat.unlit) {
         aimat->AddProperty(&mat.unlit, 1, AI_MATKEY_GLTF_UNLIT);

@@ -429,7 +429,7 @@ void AssbinImporter::ReadBinaryMaterialProperty(IOStream * stream, aiMaterialPro
     /*uint32_t size =*/ Read<uint32_t>(stream);
 
     prop->mKey = Read<aiString>(stream);
-    prop->mSemantic = Read<unsigned int>(stream);
+    prop->mSemantic = Read<aiString>(stream);
     prop->mIndex = Read<unsigned int>(stream);
 
     prop->mDataLength = Read<unsigned int>(stream);

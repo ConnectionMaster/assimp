@@ -156,7 +156,7 @@ static void CopyValue(const glTF::mat4& v, aiMatrix4x4& o)
 }
 
 inline void SetMaterialColorProperty(std::vector<int>& embeddedTexIdxs, Asset& /*r*/, glTF::TexProperty prop, aiMaterial* mat,
-    aiTextureType texType, const char* pKey, unsigned int type, unsigned int idx)
+    aiTextureType texType, const char* pKey, const char* type, unsigned int idx)
 {
     if (prop.texture) {
         if (prop.texture->source) {
@@ -194,10 +194,10 @@ void glTFImporter::ImportMaterials(glTF::Asset& r)
             aimat->AddProperty(&str, AI_MATKEY_NAME);
         }
 
-        SetMaterialColorProperty(embeddedTexIdxs, r, mat.ambient,  aimat, aiTextureType_AMBIENT,  AI_MATKEY_COLOR_AMBIENT );
-        SetMaterialColorProperty(embeddedTexIdxs, r, mat.diffuse,  aimat, aiTextureType_DIFFUSE,  AI_MATKEY_COLOR_DIFFUSE );
-        SetMaterialColorProperty(embeddedTexIdxs, r, mat.specular, aimat, aiTextureType_SPECULAR, AI_MATKEY_COLOR_SPECULAR);
-        SetMaterialColorProperty(embeddedTexIdxs, r, mat.emission, aimat, aiTextureType_EMISSIVE, AI_MATKEY_COLOR_EMISSIVE);
+        SetMaterialColorProperty(embeddedTexIdxs, r, mat.ambient,  aimat, aiTextureType_AMBIENT(),  AI_MATKEY_COLOR_AMBIENT );
+        SetMaterialColorProperty(embeddedTexIdxs, r, mat.diffuse,  aimat, aiTextureType_DIFFUSE(),  AI_MATKEY_COLOR_DIFFUSE );
+        SetMaterialColorProperty(embeddedTexIdxs, r, mat.specular, aimat, aiTextureType_SPECULAR(), AI_MATKEY_COLOR_SPECULAR);
+        SetMaterialColorProperty(embeddedTexIdxs, r, mat.emission, aimat, aiTextureType_EMISSIVE(), AI_MATKEY_COLOR_EMISSIVE);
 
         aimat->AddProperty(&mat.doubleSided, 1, AI_MATKEY_TWOSIDED);
 

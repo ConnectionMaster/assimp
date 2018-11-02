@@ -129,7 +129,7 @@ bool LWOImporter::HandleTextures(aiMaterial* pcMat, const TextureList& in, aiTex
 
                     // add the UV source index
                     temp = texture.mRealUVIndex;
-                    pcMat->AddProperty<int>((int*)&temp,1,AI_MATKEY_UVWSRC(type,cur));
+                    pcMat->AddProperty((int*)&temp,1,AI_MATKEY_UVWSRC(type,cur));
 
                     mapping = aiTextureMapping_UV;
                 }
@@ -221,7 +221,7 @@ bool LWOImporter::HandleTextures(aiMaterial* pcMat, const TextureList& in, aiTex
         pcMat->AddProperty(&s,AI_MATKEY_TEXTURE(type,cur));
 
         // add the blend factor
-        pcMat->AddProperty<float>(&texture.mStrength,1,AI_MATKEY_TEXBLEND(type,cur));
+        pcMat->AddProperty(&texture.mStrength,1,AI_MATKEY_TEXBLEND(type,cur));
 
         // add the blend operation
         switch (texture.blendType)
@@ -250,19 +250,19 @@ bool LWOImporter::HandleTextures(aiMaterial* pcMat, const TextureList& in, aiTex
 
         }
         // Setup texture operation
-        pcMat->AddProperty<int>((int*)&temp,1,AI_MATKEY_TEXOP(type,cur));
+        pcMat->AddProperty((int*)&temp,1,AI_MATKEY_TEXOP(type,cur));
 
         // setup the mapping mode
         int mapping_ = static_cast<int>(mapping);
-        pcMat->AddProperty<int>(&mapping_, 1, AI_MATKEY_MAPPING(type, cur));
+        pcMat->AddProperty(&mapping_, 1, AI_MATKEY_MAPPING(type, cur));
 
         // add the u-wrapping
         temp = (unsigned int)GetMapMode(texture.wrapModeWidth);
-        pcMat->AddProperty<int>((int*)&temp,1,AI_MATKEY_MAPPINGMODE_U(type,cur));
+        pcMat->AddProperty((int*)&temp,1,AI_MATKEY_MAPPINGMODE_U(type,cur));
 
         // add the v-wrapping
         temp = (unsigned int)GetMapMode(texture.wrapModeHeight);
-        pcMat->AddProperty<int>((int*)&temp,1,AI_MATKEY_MAPPINGMODE_V(type,cur));
+        pcMat->AddProperty((int*)&temp,1,AI_MATKEY_MAPPINGMODE_V(type,cur));
 
         ++cur;
     }
@@ -316,7 +316,7 @@ void LWOImporter::ConvertMaterial(const LWO::Surface& surf,aiMaterial* pcMat)
     // emissive color
     // luminosity is not really the same but it affects the surface in a similar way. Some scaling looks good.
     clr.g = clr.b = clr.r = surf.mLuminosity*ai_real( 0.8 );
-    pcMat->AddProperty<aiColor3D>(&clr,1,AI_MATKEY_COLOR_EMISSIVE);
+    pcMat->AddProperty(&clr,1,AI_MATKEY_COLOR_EMISSIVE);
 
     // opacity ... either additive or default-blended, please
     if (0.0 != surf.mAdditiveTransparency)  {
@@ -336,13 +336,13 @@ void LWOImporter::ConvertMaterial(const LWO::Surface& surf,aiMaterial* pcMat)
 
     // ADD TEXTURES to the material
     // TODO: find out how we can handle COLOR textures correctly...
-    bool b = HandleTextures(pcMat,surf.mColorTextures,aiTextureType_DIFFUSE);
-    b = (b || HandleTextures(pcMat,surf.mDiffuseTextures,aiTextureType_DIFFUSE));
-    HandleTextures(pcMat,surf.mSpecularTextures,aiTextureType_SPECULAR);
-    HandleTextures(pcMat,surf.mGlossinessTextures,aiTextureType_SHININESS);
-    HandleTextures(pcMat,surf.mBumpTextures,aiTextureType_HEIGHT);
-    HandleTextures(pcMat,surf.mOpacityTextures,aiTextureType_OPACITY);
-    HandleTextures(pcMat,surf.mReflectionTextures,aiTextureType_REFLECTION);
+    bool b = HandleTextures(pcMat,surf.mColorTextures,aiTextureType_DIFFUSE());
+    b = (b || HandleTextures(pcMat,surf.mDiffuseTextures,aiTextureType_DIFFUSE()));
+    HandleTextures(pcMat,surf.mSpecularTextures,aiTextureType_SPECULAR());
+    HandleTextures(pcMat,surf.mGlossinessTextures,aiTextureType_SHININESS());
+    HandleTextures(pcMat,surf.mBumpTextures,aiTextureType_HEIGHT());
+    HandleTextures(pcMat,surf.mOpacityTextures,aiTextureType_OPACITY());
+    HandleTextures(pcMat,surf.mReflectionTextures,aiTextureType_REFLECTION());
 
     // Now we need to know which shader to use .. iterate through the shader list of
     // the surface and  search for a name which we know ...
@@ -375,7 +375,7 @@ void LWOImporter::ConvertMaterial(const LWO::Surface& surf,aiMaterial* pcMat)
     clr.r *= surf.mDiffuseValue;
     clr.g *= surf.mDiffuseValue;
     clr.b *= surf.mDiffuseValue;
-    pcMat->AddProperty<aiColor3D>(&clr,1,AI_MATKEY_COLOR_DIFFUSE);
+    pcMat->AddProperty(&clr,1,AI_MATKEY_COLOR_DIFFUSE);
 }
 
 // ------------------------------------------------------------------------------------------------
