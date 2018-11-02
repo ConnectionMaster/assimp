@@ -207,7 +207,7 @@ protected:
 protected:
   /// Dammit C++ - y u no compile two-pass? No I have to add all methods below the struct definitions
   /// Reads a single surface entry from the given material keys
-  void ReadMaterialSurface( Surface& poSurface, const aiMaterial* pSrcMat, aiTextureType pTexture, const char* pKey, size_t pType, size_t pIndex);
+  void ReadMaterialSurface( Surface& poSurface, const aiMaterial* pSrcMat, aiTextureType pTexture, const char* pKey, const char* pType, size_t pIndex);
   /// Writes an image entry for the given surface
   void WriteImageEntry( const Surface& pSurface, const std::string& pNameAdd);
   /// Writes the two parameters necessary for referencing a texture in an effect entry

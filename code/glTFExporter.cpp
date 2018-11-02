@@ -244,7 +244,7 @@ inline Ref<Accessor> ExportData(Asset& a, std::string& meshName, Ref<Buffer>& bu
 }
 
 namespace {
-    void GetMatScalar(const aiMaterial* mat, float& val, const char* propName, int type, int idx) {
+    void GetMatScalar(const aiMaterial* mat, float& val, const char* propName, aiTextureType type, int idx) {
         if (mat->Get(propName, type, idx, val) == AI_SUCCESS) {}
     }
 }
@@ -295,7 +295,7 @@ void glTFExporter::GetTexSampler(const aiMaterial* mat, glTF::TexProperty& prop)
     prop.texture->sampler->minFilter = SamplerMinFilter_Linear;
 }
 
-void glTFExporter::GetMatColorOrTex(const aiMaterial* mat, glTF::TexProperty& prop, const char* propName, int type, int idx, aiTextureType tt)
+void glTFExporter::GetMatColorOrTex(const aiMaterial* mat, glTF::TexProperty& prop, const char* propName, const char* type, int idx, aiTextureType tt)
 {
     aiString tex;
     aiColor4D col;
@@ -362,10 +362,10 @@ void glTFExporter::ExportMaterials()
 
         Ref<Material> m = mAsset->materials.Create(name);
 
-        GetMatColorOrTex(mat, m->ambient, AI_MATKEY_COLOR_AMBIENT, aiTextureType_AMBIENT);
-        GetMatColorOrTex(mat, m->diffuse, AI_MATKEY_COLOR_DIFFUSE, aiTextureType_DIFFUSE);
-        GetMatColorOrTex(mat, m->specular, AI_MATKEY_COLOR_SPECULAR, aiTextureType_SPECULAR);
-        GetMatColorOrTex(mat, m->emission, AI_MATKEY_COLOR_EMISSIVE, aiTextureType_EMISSIVE);
+        GetMatColorOrTex(mat, m->ambient, AI_MATKEY_COLOR_AMBIENT, aiTextureType_AMBIENT());
+        GetMatColorOrTex(mat, m->diffuse, AI_MATKEY_COLOR_DIFFUSE, aiTextureType_DIFFUSE());
+        GetMatColorOrTex(mat, m->specular, AI_MATKEY_COLOR_SPECULAR, aiTextureType_SPECULAR());
+        GetMatColorOrTex(mat, m->emission, AI_MATKEY_COLOR_EMISSIVE, aiTextureType_EMISSIVE());
 
         m->transparent = mat->Get(AI_MATKEY_OPACITY, m->transparency) == aiReturn_SUCCESS && m->transparency != 1.0;
 

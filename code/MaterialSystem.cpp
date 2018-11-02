@@ -59,7 +59,7 @@ using namespace Assimp;
 // Get a specific property from a material
 aiReturn aiGetMaterialProperty(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     const aiMaterialProperty** pPropOut)
 {
@@ -76,7 +76,7 @@ aiReturn aiGetMaterialProperty(const aiMaterial* pMat,
 
         if (prop /* just for safety ... */
             && 0 == strcmp( prop->mKey.data, pKey )
-            && (UINT_MAX == type  || prop->mSemantic == type) /* UINT_MAX is a wild-card, but this is undocumented :-) */
+            && ("" == type  || strcmp(prop->mSemantic.data, type) == 0 ) /* UINT_MAX is a wild-card, but this is undocumented :-) */
             && (UINT_MAX == index || prop->mIndex == index))
         {
             *pPropOut = pMat->mProperties[i];
@@ -91,7 +91,7 @@ aiReturn aiGetMaterialProperty(const aiMaterial* pMat,
 // Get an array of floating-point values from the material.
 aiReturn aiGetMaterialFloatArray(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     ai_real* pOut,
     unsigned int* pMax)
@@ -177,7 +177,7 @@ aiReturn aiGetMaterialFloatArray(const aiMaterial* pMat,
 // Get an array if integers from the material
 aiReturn aiGetMaterialIntegerArray(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     int* pOut,
     unsigned int* pMax)
@@ -256,10 +256,13 @@ aiReturn aiGetMaterialIntegerArray(const aiMaterial* pMat,
 // Get a color (3 or 4 floats) from the material
 aiReturn aiGetMaterialColor(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     aiColor4D* pOut)
 {
+    if (type == 0) {
+        type = "";
+    }
     unsigned int iMax = 4;
     const aiReturn eRet = aiGetMaterialFloatArray(pMat,pKey,type,index,(ai_real*)pOut,&iMax);
 
@@ -275,10 +278,13 @@ aiReturn aiGetMaterialColor(const aiMaterial* pMat,
 // Get a aiUVTransform (4 floats) from the material
 aiReturn aiGetMaterialUVTransform(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     aiUVTransform* pOut)
 {
+    if (type == 0) {
+        type = "";
+    }
     unsigned int iMax = 4;
     return aiGetMaterialFloatArray(pMat,pKey,type,index,(ai_real*)pOut,&iMax);
 }
@@ -287,11 +293,14 @@ aiReturn aiGetMaterialUVTransform(const aiMaterial* pMat,
 // Get a string from the material
 aiReturn aiGetMaterialString(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     aiString* pOut)
 {
     ai_assert (pOut != NULL);
+    if (type == 0) {
+        type = "";
+    }
 
     const aiMaterialProperty* prop;
     aiGetMaterialProperty(pMat,pKey,type,index,(const aiMaterialProperty**)&prop);
@@ -321,7 +330,7 @@ aiReturn aiGetMaterialString(const aiMaterial* pMat,
 // ------------------------------------------------------------------------------------------------
 // Get the number of textures on a particular texture stack
 unsigned int aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
-    C_ENUM aiTextureType type)
+    aiTextureType type)
 {
     ai_assert (pMat != NULL);
 
@@ -332,7 +341,7 @@ unsigned int aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
 
         if ( prop /* just a sanity check ... */
             && 0 == strcmp( prop->mKey.data, _AI_MATKEY_TEXTURE_BASE )
-            && prop->mSemantic == type) {
+            && strcmp(prop->mSemantic.data, type) == 0) {
 
             max = std::max(max,prop->mIndex+1);
         }
@@ -436,7 +445,7 @@ void aiMaterial::Clear()
 }
 
 // ------------------------------------------------------------------------------------------------
-aiReturn aiMaterial::RemoveProperty ( const char* pKey,unsigned int type, unsigned int index )
+aiReturn aiMaterial::RemoveProperty ( const char* pKey,const char* type, unsigned int index )
 {
     ai_assert( nullptr != pKey );
 
@@ -444,7 +453,7 @@ aiReturn aiMaterial::RemoveProperty ( const char* pKey,unsigned int type, unsign
         aiMaterialProperty* prop = mProperties[i];
 
         if (prop && !strcmp( prop->mKey.data, pKey ) &&
-            prop->mSemantic == type && prop->mIndex == index)
+            strcmp(prop->mSemantic.data, type) == 0 && prop->mIndex == index)
         {
             // Delete this entry
             delete mProperties[i];
@@ -465,7 +474,7 @@ aiReturn aiMaterial::RemoveProperty ( const char* pKey,unsigned int type, unsign
 aiReturn aiMaterial::AddBinaryProperty (const void* pInput,
     unsigned int pSizeInBytes,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     aiPropertyTypeInfo pType
     )
@@ -484,7 +493,7 @@ aiReturn aiMaterial::AddBinaryProperty (const void* pInput,
         aiMaterialProperty *prop( mProperties[ i ] );
 
         if (prop /* just for safety */ && !strcmp( prop->mKey.data, pKey ) &&
-            prop->mSemantic == type && prop->mIndex == index){
+            strcmp(prop->mSemantic.data, type) == 0 && prop->mIndex == index){
 
             delete mProperties[i];
             iOutIndex = i;
@@ -535,37 +544,6 @@ aiReturn aiMaterial::AddBinaryProperty (const void* pInput,
     mProperties[mNumProperties++] = pcNew;
 
     return AI_SUCCESS;
-}
-
-// ------------------------------------------------------------------------------------------------
-aiReturn aiMaterial::AddProperty (const aiString* pInput,
-    const char* pKey,
-    unsigned int type,
-    unsigned int index)
-{
-    // We don't want to add the whole buffer .. write a 32 bit length
-    // prefix followed by the zero-terminated UTF8 string.
-    // (HACK) I don't want to break the ABI now, but we definitely
-    // ought to change aiString::mLength to uint32_t one day.
-    if (sizeof(size_t) == 8) {
-        aiString copy = *pInput;
-        uint32_t* s = reinterpret_cast<uint32_t*>(&copy.length);
-        s[1] = static_cast<uint32_t>(pInput->length);
-
-        return AddBinaryProperty(s+1,
-            static_cast<unsigned int>(pInput->length+1+4),
-            pKey,
-            type,
-            index,
-            aiPTI_String);
-    }
-    ai_assert(sizeof(size_t)==4);
-    return AddBinaryProperty(pInput,
-        static_cast<unsigned int>(pInput->length+1+4),
-        pKey,
-        type,
-        index,
-        aiPTI_String);
 }
 
 // ------------------------------------------------------------------------------------------------

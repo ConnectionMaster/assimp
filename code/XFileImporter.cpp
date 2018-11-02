@@ -184,7 +184,7 @@ void XFileImporter::CreateDataRepresentationFromImport( aiScene* pScene, XFile::
         // create the Material
         aiMaterial* mat = new aiMaterial;
         int shadeMode = (int) aiShadingMode_Gouraud;
-        mat->AddProperty<int>( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
+        mat->AddProperty( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
         // material colours
         int specExp = 1;
 
@@ -610,7 +610,7 @@ void XFileImporter::ConvertMaterials( aiScene* pScene, std::vector<XFile::Materi
         int shadeMode = (int)oldMat.mSpecularExponent == 0.0f
             ? aiShadingMode_Gouraud : aiShadingMode_Phong;
 
-        mat->AddProperty<int>( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
+        mat->AddProperty( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
         // material colours
         // Unclear: there's no ambient colour, but emissive. What to put for ambient?
         // Probably nothing at all, let the user select a suitable default.

@@ -595,8 +595,8 @@ void ObjFileImporter::addTextureMappingModeProperty( aiMaterial* mat, aiTextureT
         return;
     }
 
-    mat->AddProperty<int>( &clampMode, 1, AI_MATKEY_MAPPINGMODE_U( type, index ) );
-    mat->AddProperty<int>( &clampMode, 1, AI_MATKEY_MAPPINGMODE_V( type, index ) );
+    mat->AddProperty( &clampMode, 1, AI_MATKEY_MAPPINGMODE_U( type, index ) );
+    mat->AddProperty( &clampMode, 1, AI_MATKEY_MAPPINGMODE_V( type, index ) );
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -646,7 +646,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             ASSIMP_LOG_ERROR("OBJ: unexpected illumination model (0-2 recognized)");
         }
 
-        mat->AddProperty<int>( &sm, 1, AI_MATKEY_SHADING_MODEL);
+        mat->AddProperty( &sm, 1, AI_MATKEY_SHADING_MODEL);
 
         // Adding material colors
         mat->AddProperty( &pCurrentMaterial->ambient, 1, AI_MATKEY_COLOR_AMBIENT );
@@ -669,7 +669,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_DIFFUSE(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureDiffuseType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_DIFFUSE);
+                addTextureMappingModeProperty(mat, aiTextureType_DIFFUSE());
             }
         }
 
@@ -679,7 +679,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_AMBIENT(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureAmbientType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_AMBIENT);
+                addTextureMappingModeProperty(mat, aiTextureType_AMBIENT());
             }
         }
 
@@ -695,7 +695,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_SPECULAR(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureSpecularType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_SPECULAR);
+                addTextureMappingModeProperty(mat, aiTextureType_SPECULAR());
             }
         }
 
@@ -705,7 +705,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_HEIGHT(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureBumpType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_HEIGHT);
+                addTextureMappingModeProperty(mat, aiTextureType_HEIGHT());
             }
         }
 
@@ -715,7 +715,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_NORMALS(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureNormalType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_NORMALS);
+                addTextureMappingModeProperty(mat, aiTextureType_NORMALS());
             }
         }
 
@@ -732,7 +732,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
                 mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_REFLECTION(i) );
 
                 if(pCurrentMaterial->clamp[type])
-                    addTextureMappingModeProperty(mat, aiTextureType_REFLECTION, 1, i);
+                    addTextureMappingModeProperty(mat, aiTextureType_REFLECTION(), 1, i);
             }
         }
 
@@ -742,7 +742,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_DISPLACEMENT(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureDispType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_DISPLACEMENT);
+                addTextureMappingModeProperty(mat, aiTextureType_DISPLACEMENT());
             }
         }
 
@@ -752,7 +752,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_OPACITY(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureOpacityType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_OPACITY);
+                addTextureMappingModeProperty(mat, aiTextureType_OPACITY());
             }
         }
 
@@ -762,7 +762,7 @@ void ObjFileImporter::createMaterials(const ObjFile::Model* pModel, aiScene* pSc
             mat->AddProperty( &uvwIndex, 1, AI_MATKEY_UVWSRC_SHININESS(0) );
             if (pCurrentMaterial->clamp[ObjFile::Material::TextureSpecularityType])
             {
-                addTextureMappingModeProperty(mat, aiTextureType_SHININESS);
+                addTextureMappingModeProperty(mat, aiTextureType_SHININESS());
             }
         }
 

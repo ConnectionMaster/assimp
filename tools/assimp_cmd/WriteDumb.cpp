@@ -481,7 +481,7 @@ uint32_t WriteBinaryMaterialProperty(const aiMaterialProperty* prop)
 	uint32_t len = 0, old = WriteMagic(ASSBIN_CHUNK_AIMATERIALPROPERTY);
 
 	len += Write<aiString>(prop->mKey);
-	len += Write<unsigned int>(prop->mSemantic);
+	len += Write<aiString>(prop->mSemantic);
 	len += Write<unsigned int>(prop->mIndex);
 
 	len += Write<unsigned int>(prop->mDataLength);
@@ -793,45 +793,6 @@ void WriteNode(const aiNode* node, FILE* out, unsigned int depth)
 }
 
 
-// -------------------------------------------------------------------------------
-const char* TextureTypeToString(aiTextureType in)
-{
-	switch (in)
-	{
-	case aiTextureType_NONE:
-		return "n/a";
-	case aiTextureType_DIFFUSE:
-		return "Diffuse";
-	case aiTextureType_SPECULAR:
-		return "Specular";
-	case aiTextureType_AMBIENT:
-		return "Ambient";
-	case aiTextureType_EMISSIVE:
-		return "Emissive";
-	case aiTextureType_OPACITY:
-		return "Opacity";
-	case aiTextureType_NORMALS:
-		return "Normals";
-	case aiTextureType_HEIGHT:
-		return "Height";
-	case aiTextureType_SHININESS:
-		return "Shininess";
-	case aiTextureType_DISPLACEMENT:
-		return "Displacement";
-	case aiTextureType_LIGHTMAP:
-		return "Lightmap";
-	case aiTextureType_REFLECTION:
-		return "Reflection";
-	case aiTextureType_UNKNOWN:
-		return "Unknown";
-	default:
-		break;
-	}
-	ai_assert(false); 
-	return  "BUG";    
-}
-
-
 // -----------------------------------------------------------------------------------
 // Some chuncks of text will need to be encoded for XML
 // http://stackoverflow.com/questions/5665231/most-efficient-way-to-escape-xml-html-in-c-string#5665377
@@ -1029,7 +990,7 @@ void WriteDump(const aiScene* scene, FILE* out, const char* src, const char* cmd
 
 				fprintf(out,"\t\t\t<MatProperty key=\"%s\" \n\t\t\ttype=\"%s\" tex_usage=\"%s\" tex_index=\"%u\"",
 					prop->mKey.data, sz,
-					::TextureTypeToString((aiTextureType)prop->mSemantic),prop->mIndex);
+					prop->mSemantic.data,prop->mIndex);
 
 				if (prop->mType == aiPTI_Float) {
 					fprintf(out," size=\"%i\">\n\t\t\t\t",

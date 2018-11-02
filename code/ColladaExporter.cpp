@@ -496,7 +496,7 @@ void ColladaExporter::WriteAmbienttLight(const aiLight *const light){
 
 // ------------------------------------------------------------------------------------------------
 // Reads a single surface entry from the given material keys
-void ColladaExporter::ReadMaterialSurface( Surface& poSurface, const aiMaterial* pSrcMat, aiTextureType pTexture, const char* pKey, size_t pType, size_t pIndex)
+void ColladaExporter::ReadMaterialSurface( Surface& poSurface, const aiMaterial* pSrcMat, aiTextureType pTexture, const char* pKey, const char* pType, size_t pIndex)
 {
   if( pSrcMat->GetTextureCount( pTexture) > 0 )
   {
@@ -535,7 +535,7 @@ void ColladaExporter::ReadMaterialSurface( Surface& poSurface, const aiMaterial*
   } else
   {
     if( pKey )
-      poSurface.exist = pSrcMat->Get( pKey, static_cast<unsigned int>(pType), static_cast<unsigned int>(pIndex), poSurface.color) == aiReturn_SUCCESS;
+      poSurface.exist = pSrcMat->Get( pKey, pType, static_cast<unsigned int>(pIndex), poSurface.color) == aiReturn_SUCCESS;
   }
 }
 
@@ -685,19 +685,19 @@ void ColladaExporter::WriteMaterials()
         }
     }
 
-    ReadMaterialSurface( materials[a].ambient, mat, aiTextureType_AMBIENT, AI_MATKEY_COLOR_AMBIENT);
+    ReadMaterialSurface( materials[a].ambient, mat, aiTextureType_AMBIENT(), AI_MATKEY_COLOR_AMBIENT);
     if( !materials[a].ambient.texture.empty() ) numTextures++;
-    ReadMaterialSurface( materials[a].diffuse, mat, aiTextureType_DIFFUSE, AI_MATKEY_COLOR_DIFFUSE);
+    ReadMaterialSurface( materials[a].diffuse, mat, aiTextureType_DIFFUSE(), AI_MATKEY_COLOR_DIFFUSE);
     if( !materials[a].diffuse.texture.empty() ) numTextures++;
-    ReadMaterialSurface( materials[a].specular, mat, aiTextureType_SPECULAR, AI_MATKEY_COLOR_SPECULAR);
+    ReadMaterialSurface( materials[a].specular, mat, aiTextureType_SPECULAR(), AI_MATKEY_COLOR_SPECULAR);
     if( !materials[a].specular.texture.empty() ) numTextures++;
-    ReadMaterialSurface( materials[a].emissive, mat, aiTextureType_EMISSIVE, AI_MATKEY_COLOR_EMISSIVE);
+    ReadMaterialSurface( materials[a].emissive, mat, aiTextureType_EMISSIVE(), AI_MATKEY_COLOR_EMISSIVE);
     if( !materials[a].emissive.texture.empty() ) numTextures++;
-    ReadMaterialSurface( materials[a].reflective, mat, aiTextureType_REFLECTION, AI_MATKEY_COLOR_REFLECTIVE);
+    ReadMaterialSurface( materials[a].reflective, mat, aiTextureType_REFLECTION(), AI_MATKEY_COLOR_REFLECTIVE);
     if( !materials[a].reflective.texture.empty() ) numTextures++;
-    ReadMaterialSurface( materials[a].transparent, mat, aiTextureType_OPACITY, AI_MATKEY_COLOR_TRANSPARENT);
+    ReadMaterialSurface( materials[a].transparent, mat, aiTextureType_OPACITY(), AI_MATKEY_COLOR_TRANSPARENT);
     if( !materials[a].transparent.texture.empty() ) numTextures++;
-    ReadMaterialSurface( materials[a].normal, mat, aiTextureType_NORMALS, NULL, 0, 0);
+    ReadMaterialSurface( materials[a].normal, mat, aiTextureType_NORMALS(), NULL, 0, 0);
     if( !materials[a].normal.texture.empty() ) numTextures++;
 
     materials[a].shininess.exist = mat->Get( AI_MATKEY_SHININESS, materials[a].shininess.value) == aiReturn_SUCCESS;

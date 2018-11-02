@@ -322,7 +322,7 @@ void RAWImporter::InternReadFile( const std::string& pFile,
                 s.Set((*it2).name);
                 mat->AddProperty(&s,AI_MATKEY_TEXTURE_DIFFUSE(0));
             }
-            mat->AddProperty<aiColor4D>(&clr,1,AI_MATKEY_COLOR_DIFFUSE);
+            mat->AddProperty(&clr,1,AI_MATKEY_COLOR_DIFFUSE);
             *mats++ = mat;
         }
     }

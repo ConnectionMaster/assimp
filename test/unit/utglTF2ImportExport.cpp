@@ -65,7 +65,7 @@ public:
 
         aiString path;
         aiTextureMapMode modes[2];
-        EXPECT_EQ( aiReturn_SUCCESS, material->GetTexture(aiTextureType_DIFFUSE, 0, &path, nullptr, nullptr, nullptr, nullptr, modes) );
+        EXPECT_EQ( aiReturn_SUCCESS, material->GetTexture(aiTextureType_DIFFUSE(), 0, &path, nullptr, nullptr, nullptr, nullptr, modes) );
         EXPECT_STREQ( path.C_Str(), "CesiumLogoFlat.png" );
         EXPECT_EQ( modes[0], aiTextureMapMode_Mirror );
         EXPECT_EQ( modes[1], aiTextureMapMode_Clamp );

@@ -378,7 +378,7 @@ void glTF2Exporter::GetMatTex(const aiMaterial* mat, OcclusionTextureInfo& prop,
     }
 }
 
-aiReturn glTF2Exporter::GetMatColor(const aiMaterial* mat, vec4& prop, const char* propName, int type, int idx)
+aiReturn glTF2Exporter::GetMatColor(const aiMaterial* mat, vec4& prop, const char* propName, aiTextureType type, int idx)
 {
     aiColor4D col;
     aiReturn result = mat->Get(propName, type, idx, col);
@@ -390,7 +390,7 @@ aiReturn glTF2Exporter::GetMatColor(const aiMaterial* mat, vec4& prop, const cha
     return result;
 }
 
-aiReturn glTF2Exporter::GetMatColor(const aiMaterial* mat, vec3& prop, const char* propName, int type, int idx)
+aiReturn glTF2Exporter::GetMatColor(const aiMaterial* mat, vec3& prop, const char* propName, aiTextureType type, int idx)
 {
     aiColor3D col;
     aiReturn result = mat->Get(propName, type, idx, col);
@@ -424,7 +424,7 @@ void glTF2Exporter::ExportMaterials()
 
         if (!m->pbrMetallicRoughness.baseColorTexture.texture) {
             //if there wasn't a baseColorTexture defined in the source, fallback to any diffuse texture
-            GetMatTex(mat, m->pbrMetallicRoughness.baseColorTexture, aiTextureType_DIFFUSE);
+            GetMatTex(mat, m->pbrMetallicRoughness.baseColorTexture, aiTextureType_DIFFUSE());
         }
 
         GetMatTex(mat, m->pbrMetallicRoughness.metallicRoughnessTexture, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE);
@@ -464,9 +464,9 @@ void glTF2Exporter::ExportMaterials()
             }
         }
 
-        GetMatTex(mat, m->normalTexture, aiTextureType_NORMALS);
-        GetMatTex(mat, m->occlusionTexture, aiTextureType_LIGHTMAP);
-        GetMatTex(mat, m->emissiveTexture, aiTextureType_EMISSIVE);
+        GetMatTex(mat, m->normalTexture, aiTextureType_NORMALS());
+        GetMatTex(mat, m->occlusionTexture, aiTextureType_LIGHTMAP());
+        GetMatTex(mat, m->emissiveTexture, aiTextureType_EMISSIVE());
         GetMatColor(mat, m->emissiveFactor, AI_MATKEY_COLOR_EMISSIVE);
 
         mat->Get(AI_MATKEY_TWOSIDED, m->doubleSided);
@@ -509,8 +509,8 @@ void glTF2Exporter::ExportMaterials()
                 }
             }
 
-            GetMatTex(mat, pbrSG.diffuseTexture, aiTextureType_DIFFUSE);
-            GetMatTex(mat, pbrSG.specularGlossinessTexture, aiTextureType_SPECULAR);
+            GetMatTex(mat, pbrSG.diffuseTexture, aiTextureType_DIFFUSE());
+            GetMatTex(mat, pbrSG.specularGlossinessTexture, aiTextureType_SPECULAR());
 
             m->pbrSpecularGlossiness = Nullable<PbrSpecularGlossiness>(pbrSG);
         }

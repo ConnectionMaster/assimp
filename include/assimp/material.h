@@ -51,6 +51,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "types.h"
 
 #ifdef __cplusplus
+
+#include<map>
+
 extern "C" {
 #endif
 
@@ -188,107 +191,114 @@ enum aiTextureMapping
  *  and the artists working on models have to conform to this specification,
  *  regardless which 3D tool they're using.
  */
-enum aiTextureType
-{
-    /** Dummy value.
-     *
-     *  No texture, but the value to be used as 'texture semantic'
-     *  (#aiMaterialProperty::mSemantic) for all material properties
-     *  *not* related to textures.
-     */
-    aiTextureType_NONE = 0x0,
+typedef const char * aiTextureType;
 
-
-
-    /** The texture is combined with the result of the diffuse
-     *  lighting equation.
-     */
-    aiTextureType_DIFFUSE = 0x1,
-
-    /** The texture is combined with the result of the specular
-     *  lighting equation.
-     */
-    aiTextureType_SPECULAR = 0x2,
-
-    /** The texture is combined with the result of the ambient
-     *  lighting equation.
-     */
-    aiTextureType_AMBIENT = 0x3,
-
-    /** The texture is added to the result of the lighting
-     *  calculation. It isn't influenced by incoming light.
-     */
-    aiTextureType_EMISSIVE = 0x4,
-
-    /** The texture is a height map.
-     *
-     *  By convention, higher gray-scale values stand for
-     *  higher elevations from the base height.
-     */
-    aiTextureType_HEIGHT = 0x5,
-
-    /** The texture is a (tangent space) normal-map.
-     *
-     *  Again, there are several conventions for tangent-space
-     *  normal maps. Assimp does (intentionally) not
-     *  distinguish here.
-     */
-    aiTextureType_NORMALS = 0x6,
-
-    /** The texture defines the glossiness of the material.
-     *
-     *  The glossiness is in fact the exponent of the specular
-     *  (phong) lighting equation. Usually there is a conversion
-     *  function defined to map the linear color values in the
-     *  texture to a suitable exponent. Have fun.
+/** Dummy value.
+    *
+    *  No texture, but the value to be used as 'texture semantic'
+    *  (#aiMaterialProperty::mSemantic) for all material properties
+    *  *not* related to textures.
     */
-    aiTextureType_SHININESS = 0x7,
+inline const char *aiTextureType_NONE() { return "none"; }
 
-    /** The texture defines per-pixel opacity.
-     *
-     *  Usually 'white' means opaque and 'black' means
-     *  'transparency'. Or quite the opposite. Have fun.
-    */
-    aiTextureType_OPACITY = 0x8,
 
-    /** Displacement texture
-     *
-     *  The exact purpose and format is application-dependent.
-     *  Higher color values stand for higher vertex displacements.
-    */
-    aiTextureType_DISPLACEMENT = 0x9,
 
-    /** Lightmap texture (aka Ambient Occlusion)
-     *
-     *  Both 'Lightmaps' and dedicated 'ambient occlusion maps' are
-     *  covered by this material property. The texture contains a
-     *  scaling value for the final color value of a pixel. Its
-     *  intensity is not affected by incoming light.
+/** The texture is combined with the result of the diffuse
+    *  lighting equation.
     */
-    aiTextureType_LIGHTMAP = 0xA,
+inline const char *aiTextureType_DIFFUSE() { return "diffuse"; }
 
-    /** Reflection texture
-     *
-     * Contains the color of a perfect mirror reflection.
-     * Rarely used, almost never for real-time applications.
+/** The texture is combined with the result of the specular
+    *  lighting equation.
     */
-    aiTextureType_REFLECTION = 0xB,
+inline const char *aiTextureType_SPECULAR() { return "specular"; }
 
-    /** Unknown texture
-     *
-     *  A texture reference that does not match any of the definitions
-     *  above is considered to be 'unknown'. It is still imported,
-     *  but is excluded from any further postprocessing.
+/** The texture is combined with the result of the ambient
+    *  lighting equation.
     */
-    aiTextureType_UNKNOWN = 0xC,
+inline const char *aiTextureType_AMBIENT() { return "ambient"; }
+
+/** The texture is added to the result of the lighting
+    *  calculation. It isn't influenced by incoming light.
+    */
+inline const char *aiTextureType_EMISSIVE() { return "emissive"; }
+
+/** The texture is a height map.
+    *
+    *  By convention, higher gray-scale values stand for
+    *  higher elevations from the base height.
+    */
+inline const char *aiTextureType_HEIGHT() { return "height"; }
+
+/** The texture is a (tangent space) normal-map.
+    *
+    *  Again, there are several conventions for tangent-space
+    *  normal maps. Assimp does (intentionally) not
+    *  distinguish here.
+    */
+inline const char *aiTextureType_NORMALS() { return "normals"; }
+
+/** The texture defines the glossiness of the material.
+    *
+    *  The glossiness is in fact the exponent of the specular
+    *  (phong) lighting equation. Usually there is a conversion
+    *  function defined to map the linear color values in the
+    *  texture to a suitable exponent. Have fun.
+*/
+inline const char *aiTextureType_SHININESS() { return "shininess"; }
+
+/** The texture defines per-pixel opacity.
+    *
+    *  Usually 'white' means opaque and 'black' means
+    *  'transparency'. Or quite the opposite. Have fun.
+*/
+inline const char *aiTextureType_OPACITY() { return "opacity"; }
+
+/** Displacement texture
+    *
+    *  The exact purpose and format is application-dependent.
+    *  Higher color values stand for higher vertex displacements.
+*/
+inline const char *aiTextureType_DISPLACEMENT() { return "displacement"; }
+
+/** Lightmap texture (aka Ambient Occlusion)
+    *
+    *  Both 'Lightmaps' and dedicated 'ambient occlusion maps' are
+    *  covered by this material property. The texture contains a
+    *  scaling value for the final color value of a pixel. Its
+    *  intensity is not affected by incoming light.
+*/
+inline const char *aiTextureType_LIGHTMAP() { return "lightmap"; }
+
+/** Reflection texture
+    *
+    * Contains the color of a perfect mirror reflection.
+    * Rarely used, almost never for real-time applications.
+*/
+inline const char *aiTextureType_REFLECTION() { return "reflect"; }
+
+/** Roughness map
+*/
+inline const char *aiTextureType_ROUGHNESS() { return "roughness"; }
+
+/** Metalness map
+*/
+inline const char *aiTextureType_METALNESS() { return "metalness"; }
+
+/** Unknown texture
+    *
+    *  A texture reference that does not match any of the definitions
+    *  above is considered to be 'unknown'. It is still imported,
+    *  but is excluded from any further postprocessing.
+*/
+inline const char *aiTextureType_UNKNOWN() { return "unknown"; }
 
 
 #ifndef SWIG
-    _aiTextureType_Force32Bit = INT_MAX
+inline const char *_aiTextureType_Force32Bit() { return ""; }
 #endif
-};
 
-#define AI_TEXTURE_TYPE_MAX  aiTextureType_UNKNOWN
+//#define AI_TEXTURE_TYPE_MAX  aiTextureType_UNKNOWN()
 
 // ---------------------------------------------------------------------------
 /** @brief Defines all shading models supported by the library
@@ -576,10 +586,10 @@ struct aiMaterialProperty
     C_STRUCT aiString mKey;
 
     /** Textures: Specifies their exact usage semantic.
-     * For non-texture properties, this member is always 0
-     * (or, better-said, #aiTextureType_NONE).
+     * For non-texture properties, this string is always ""
+     * (or, better-said, #aiTextureType_NONE()).
      */
-    unsigned int mSemantic;
+    C_STRUCT aiString mSemantic;
 
     /** Textures: Specifies the index of the texture.
      *  For non-texture properties, this member is always 0.
@@ -608,7 +618,7 @@ struct aiMaterialProperty
 #ifdef __cplusplus
 
     aiMaterialProperty() AI_NO_EXCEPT
-    : mSemantic( 0 )
+    : mSemantic( "" )
     , mIndex( 0 )
     , mDataLength( 0 )
     , mType( aiPTI_Float )
@@ -673,13 +683,13 @@ public:
      * NULL is a valid value for this parameter.
      */
     template <typename Type>
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, Type* pOut, unsigned int* pMax) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, int* pOut, unsigned int* pMax) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, ai_real* pOut, unsigned int* pMax) const;
 
     // -------------------------------------------------------------------
@@ -693,27 +703,34 @@ public:
      * @param pOut Reference to receive the output value
      */
     template <typename Type>
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx,Type& pOut) const;
 
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, int& pOut) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, ai_real& pOut) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, aiString& pOut) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, aiColor3D& pOut) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, aiColor4D& pOut) const;
 
-    aiReturn Get(const char* pKey,unsigned int type,
+    aiReturn Get(const char* pKey,const char* type,
         unsigned int idx, aiUVTransform& pOut) const;
+
+    // -------------------------------------------------------------------
+    /** Get all texture paths with their texture types as keys
+    */
+#ifdef __cplusplus
+    std::map<std::string, std::string> GetAllTextures();
+#endif
 
     // -------------------------------------------------------------------
     /** Get the number of textures for a particular texture type.
@@ -779,7 +796,7 @@ public:
     aiReturn AddBinaryProperty (const void* pInput,
         unsigned int pSizeInBytes,
         const char* pKey,
-        unsigned int type ,
+        const char* type ,
         unsigned int index ,
         aiPropertyTypeInfo pType);
 
@@ -793,8 +810,8 @@ public:
      *  @param index Set by the AI_MATKEY_XXX macro */
     aiReturn AddProperty (const aiString* pInput,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
     // ------------------------------------------------------------------------------
     /** @brief Add a property with a given key to the material structure
@@ -803,54 +820,73 @@ public:
      *  @param pKey Key/Usage of the property (AI_MATKEY_XXX)
      *  @param type Set by the AI_MATKEY_XXX macro
      *  @param index Set by the AI_MATKEY_XXX macro  */
-    template<class TYPE>
-    aiReturn AddProperty (const TYPE* pInput,
-        unsigned int pNumValues,
-        const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+    //template<class TYPE>
+    //aiReturn AddProperty (const TYPE* pInput,
+    //    unsigned int pNumValues,
+    //    const char* pKey,
+    //    const char* type  = "",
+    //    unsigned int index = 0);
 
     aiReturn AddProperty (const aiVector3D* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
     aiReturn AddProperty (const aiColor3D* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
     aiReturn AddProperty (const aiColor4D* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
-    aiReturn AddProperty (const int* pInput,
+    aiReturn AddProperty(const int* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
+
+    aiReturn AddProperty(const bool* pInput,
+        unsigned int pNumValues,
+        const char* pKey,
+        const char* type,
+        unsigned int index);
+
+    aiReturn AddProperty(const aiTextureMapMode* pInput,
+        unsigned int pNumValues,
+        const char* pKey,
+        const char* type,
+        unsigned int index);
+
+    aiReturn AddProperty(const unsigned int* pInput,
+        unsigned int pNumValues,
+        const char* pKey,
+        const char* type,
+        unsigned int index);
+
 
     aiReturn AddProperty (const float* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
     aiReturn AddProperty (const double* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
     aiReturn AddProperty (const aiUVTransform* pInput,
         unsigned int pNumValues,
         const char* pKey,
-        unsigned int type  = 0,
-        unsigned int index = 0);
+        const char* type,
+        unsigned int index);
 
     // ------------------------------------------------------------------------------
     /** @brief Remove a given key from the list.
@@ -860,7 +896,7 @@ public:
      *  @param type Set by the AI_MATKEY_XXX macro
      *  @param index Set by the AI_MATKEY_XXX macro  */
     aiReturn RemoveProperty (const char* pKey,
-        unsigned int type  = 0,
+        const char* type  = "",
         unsigned int index = 0);
 
     // ------------------------------------------------------------------------------
@@ -936,37 +972,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_TEXTURE_DIFFUSE(N)    \
-    AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_TEXTURE_SPECULAR(N)   \
-    AI_MATKEY_TEXTURE(aiTextureType_SPECULAR,N)
+    AI_MATKEY_TEXTURE(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_TEXTURE_AMBIENT(N)    \
-    AI_MATKEY_TEXTURE(aiTextureType_AMBIENT,N)
+    AI_MATKEY_TEXTURE(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_TEXTURE_EMISSIVE(N)   \
-    AI_MATKEY_TEXTURE(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_TEXTURE(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_TEXTURE_NORMALS(N)    \
-    AI_MATKEY_TEXTURE(aiTextureType_NORMALS,N)
+    AI_MATKEY_TEXTURE(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_TEXTURE_HEIGHT(N) \
-    AI_MATKEY_TEXTURE(aiTextureType_HEIGHT,N)
+    AI_MATKEY_TEXTURE(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_TEXTURE_SHININESS(N)  \
-    AI_MATKEY_TEXTURE(aiTextureType_SHININESS,N)
+    AI_MATKEY_TEXTURE(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_TEXTURE_OPACITY(N)    \
-    AI_MATKEY_TEXTURE(aiTextureType_OPACITY,N)
+    AI_MATKEY_TEXTURE(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_TEXTURE_DISPLACEMENT(N)   \
-    AI_MATKEY_TEXTURE(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_TEXTURE(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_TEXTURE_LIGHTMAP(N)   \
-    AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_TEXTURE_REFLECTION(N) \
-    AI_MATKEY_TEXTURE(aiTextureType_REFLECTION,N)
+    AI_MATKEY_TEXTURE(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 
@@ -976,37 +1012,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_UVWSRC_DIFFUSE(N) \
-    AI_MATKEY_UVWSRC(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_UVWSRC(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_UVWSRC_SPECULAR(N)    \
-    AI_MATKEY_UVWSRC(aiTextureType_SPECULAR,N)
+    AI_MATKEY_UVWSRC(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_UVWSRC_AMBIENT(N) \
-    AI_MATKEY_UVWSRC(aiTextureType_AMBIENT,N)
+    AI_MATKEY_UVWSRC(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_UVWSRC_EMISSIVE(N)    \
-    AI_MATKEY_UVWSRC(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_UVWSRC(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_UVWSRC_NORMALS(N) \
-    AI_MATKEY_UVWSRC(aiTextureType_NORMALS,N)
+    AI_MATKEY_UVWSRC(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_UVWSRC_HEIGHT(N)  \
-    AI_MATKEY_UVWSRC(aiTextureType_HEIGHT,N)
+    AI_MATKEY_UVWSRC(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_UVWSRC_SHININESS(N)   \
-    AI_MATKEY_UVWSRC(aiTextureType_SHININESS,N)
+    AI_MATKEY_UVWSRC(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_UVWSRC_OPACITY(N) \
-    AI_MATKEY_UVWSRC(aiTextureType_OPACITY,N)
+    AI_MATKEY_UVWSRC(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_UVWSRC_DISPLACEMENT(N)    \
-    AI_MATKEY_UVWSRC(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_UVWSRC(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_UVWSRC_LIGHTMAP(N)    \
-    AI_MATKEY_UVWSRC(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_UVWSRC(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_UVWSRC_REFLECTION(N)  \
-    AI_MATKEY_UVWSRC(aiTextureType_REFLECTION,N)
+    AI_MATKEY_UVWSRC(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1015,37 +1051,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_TEXOP_DIFFUSE(N)  \
-    AI_MATKEY_TEXOP(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_TEXOP(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_TEXOP_SPECULAR(N) \
-    AI_MATKEY_TEXOP(aiTextureType_SPECULAR,N)
+    AI_MATKEY_TEXOP(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_TEXOP_AMBIENT(N)  \
-    AI_MATKEY_TEXOP(aiTextureType_AMBIENT,N)
+    AI_MATKEY_TEXOP(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_TEXOP_EMISSIVE(N) \
-    AI_MATKEY_TEXOP(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_TEXOP(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_TEXOP_NORMALS(N)  \
-    AI_MATKEY_TEXOP(aiTextureType_NORMALS,N)
+    AI_MATKEY_TEXOP(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_TEXOP_HEIGHT(N)   \
-    AI_MATKEY_TEXOP(aiTextureType_HEIGHT,N)
+    AI_MATKEY_TEXOP(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_TEXOP_SHININESS(N)    \
-    AI_MATKEY_TEXOP(aiTextureType_SHININESS,N)
+    AI_MATKEY_TEXOP(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_TEXOP_OPACITY(N)  \
-    AI_MATKEY_TEXOP(aiTextureType_OPACITY,N)
+    AI_MATKEY_TEXOP(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_TEXOP_DISPLACEMENT(N) \
-    AI_MATKEY_TEXOP(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_TEXOP(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_TEXOP_LIGHTMAP(N) \
-    AI_MATKEY_TEXOP(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_TEXOP(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_TEXOP_REFLECTION(N)   \
-    AI_MATKEY_TEXOP(aiTextureType_REFLECTION,N)
+    AI_MATKEY_TEXOP(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1054,37 +1090,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_MAPPING_DIFFUSE(N)    \
-    AI_MATKEY_MAPPING(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_MAPPING(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_MAPPING_SPECULAR(N)   \
-    AI_MATKEY_MAPPING(aiTextureType_SPECULAR,N)
+    AI_MATKEY_MAPPING(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_MAPPING_AMBIENT(N)    \
-    AI_MATKEY_MAPPING(aiTextureType_AMBIENT,N)
+    AI_MATKEY_MAPPING(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_MAPPING_EMISSIVE(N)   \
-    AI_MATKEY_MAPPING(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_MAPPING(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_MAPPING_NORMALS(N)    \
-    AI_MATKEY_MAPPING(aiTextureType_NORMALS,N)
+    AI_MATKEY_MAPPING(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_MAPPING_HEIGHT(N) \
-    AI_MATKEY_MAPPING(aiTextureType_HEIGHT,N)
+    AI_MATKEY_MAPPING(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_MAPPING_SHININESS(N)  \
-    AI_MATKEY_MAPPING(aiTextureType_SHININESS,N)
+    AI_MATKEY_MAPPING(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_MAPPING_OPACITY(N)    \
-    AI_MATKEY_MAPPING(aiTextureType_OPACITY,N)
+    AI_MATKEY_MAPPING(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_MAPPING_DISPLACEMENT(N)   \
-    AI_MATKEY_MAPPING(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_MAPPING(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_MAPPING_LIGHTMAP(N)   \
-    AI_MATKEY_MAPPING(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_MAPPING(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_MAPPING_REFLECTION(N) \
-    AI_MATKEY_MAPPING(aiTextureType_REFLECTION,N)
+    AI_MATKEY_MAPPING(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1093,37 +1129,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_TEXBLEND_DIFFUSE(N)   \
-    AI_MATKEY_TEXBLEND(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_TEXBLEND_SPECULAR(N)  \
-    AI_MATKEY_TEXBLEND(aiTextureType_SPECULAR,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_TEXBLEND_AMBIENT(N)   \
-    AI_MATKEY_TEXBLEND(aiTextureType_AMBIENT,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_TEXBLEND_EMISSIVE(N)  \
-    AI_MATKEY_TEXBLEND(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_TEXBLEND_NORMALS(N)   \
-    AI_MATKEY_TEXBLEND(aiTextureType_NORMALS,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_TEXBLEND_HEIGHT(N)    \
-    AI_MATKEY_TEXBLEND(aiTextureType_HEIGHT,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_TEXBLEND_SHININESS(N) \
-    AI_MATKEY_TEXBLEND(aiTextureType_SHININESS,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_TEXBLEND_OPACITY(N)   \
-    AI_MATKEY_TEXBLEND(aiTextureType_OPACITY,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_TEXBLEND_DISPLACEMENT(N)  \
-    AI_MATKEY_TEXBLEND(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_TEXBLEND_LIGHTMAP(N)  \
-    AI_MATKEY_TEXBLEND(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_TEXBLEND_REFLECTION(N)    \
-    AI_MATKEY_TEXBLEND(aiTextureType_REFLECTION,N)
+    AI_MATKEY_TEXBLEND(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1132,37 +1168,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_MAPPINGMODE_U_DIFFUSE(N)  \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_SPECULAR(N) \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_SPECULAR,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_AMBIENT(N)  \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_AMBIENT,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_EMISSIVE(N) \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_NORMALS(N)  \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_NORMALS,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_HEIGHT(N)   \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_HEIGHT,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_SHININESS(N)    \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_SHININESS,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_OPACITY(N)  \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_OPACITY,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_DISPLACEMENT(N) \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_LIGHTMAP(N) \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_MAPPINGMODE_U_REFLECTION(N)   \
-    AI_MATKEY_MAPPINGMODE_U(aiTextureType_REFLECTION,N)
+    AI_MATKEY_MAPPINGMODE_U(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1171,37 +1207,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_MAPPINGMODE_V_DIFFUSE(N)  \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_SPECULAR(N) \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_SPECULAR,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_AMBIENT(N)  \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_AMBIENT,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_EMISSIVE(N) \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_NORMALS(N)  \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_NORMALS,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_HEIGHT(N)   \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_HEIGHT,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_SHININESS(N)    \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_SHININESS,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_OPACITY(N)  \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_OPACITY,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_DISPLACEMENT(N) \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_LIGHTMAP(N) \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_MAPPINGMODE_V_REFLECTION(N)   \
-    AI_MATKEY_MAPPINGMODE_V(aiTextureType_REFLECTION,N)
+    AI_MATKEY_MAPPINGMODE_V(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1210,37 +1246,37 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_TEXMAP_AXIS_DIFFUSE(N)    \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_SPECULAR(N)   \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_SPECULAR,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_AMBIENT(N)    \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_AMBIENT,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_EMISSIVE(N)   \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_NORMALS(N)    \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_NORMALS,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_HEIGHT(N) \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_HEIGHT,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_SHININESS(N)  \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_SHININESS,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_OPACITY(N)    \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_OPACITY,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_DISPLACEMENT(N)   \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_LIGHTMAP(N)   \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_TEXMAP_AXIS_REFLECTION(N) \
-    AI_MATKEY_TEXMAP_AXIS(aiTextureType_REFLECTION,N)
+    AI_MATKEY_TEXMAP_AXIS(aiTextureType_REFLECTION(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1249,40 +1285,40 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_UVTRANSFORM_DIFFUSE(N)    \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_UVTRANSFORM_SPECULAR(N)   \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_SPECULAR,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_UVTRANSFORM_AMBIENT(N)    \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_AMBIENT,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_UVTRANSFORM_EMISSIVE(N)   \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_UVTRANSFORM_NORMALS(N)    \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_NORMALS,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_UVTRANSFORM_HEIGHT(N) \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_HEIGHT,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_UVTRANSFORM_SHININESS(N)  \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_SHININESS,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_UVTRANSFORM_OPACITY(N)    \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_OPACITY,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_UVTRANSFORM_DISPLACEMENT(N)   \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_UVTRANSFORM_LIGHTMAP(N)   \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_UVTRANSFORM_REFLECTION(N) \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_REFLECTION,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_REFLECTION(),N)
 
 #define AI_MATKEY_UVTRANSFORM_UNKNOWN(N)    \
-    AI_MATKEY_UVTRANSFORM(aiTextureType_UNKNOWN,N)
+    AI_MATKEY_UVTRANSFORM(aiTextureType_UNKNOWN(),N)
 
 //! @endcond
 // ---------------------------------------------------------------------------
@@ -1291,40 +1327,40 @@ extern "C" {
 // For backward compatibility and simplicity
 //! @cond MATS_DOC_FULL
 #define AI_MATKEY_TEXFLAGS_DIFFUSE(N)   \
-    AI_MATKEY_TEXFLAGS(aiTextureType_DIFFUSE,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_DIFFUSE(),N)
 
 #define AI_MATKEY_TEXFLAGS_SPECULAR(N)  \
-    AI_MATKEY_TEXFLAGS(aiTextureType_SPECULAR,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_SPECULAR(),N)
 
 #define AI_MATKEY_TEXFLAGS_AMBIENT(N)   \
-    AI_MATKEY_TEXFLAGS(aiTextureType_AMBIENT,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_AMBIENT(),N)
 
 #define AI_MATKEY_TEXFLAGS_EMISSIVE(N)  \
-    AI_MATKEY_TEXFLAGS(aiTextureType_EMISSIVE,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_EMISSIVE(),N)
 
 #define AI_MATKEY_TEXFLAGS_NORMALS(N)   \
-    AI_MATKEY_TEXFLAGS(aiTextureType_NORMALS,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_NORMALS(),N)
 
 #define AI_MATKEY_TEXFLAGS_HEIGHT(N)    \
-    AI_MATKEY_TEXFLAGS(aiTextureType_HEIGHT,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_HEIGHT(),N)
 
 #define AI_MATKEY_TEXFLAGS_SHININESS(N) \
-    AI_MATKEY_TEXFLAGS(aiTextureType_SHININESS,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_SHININESS(),N)
 
 #define AI_MATKEY_TEXFLAGS_OPACITY(N)   \
-    AI_MATKEY_TEXFLAGS(aiTextureType_OPACITY,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_OPACITY(),N)
 
 #define AI_MATKEY_TEXFLAGS_DISPLACEMENT(N)  \
-    AI_MATKEY_TEXFLAGS(aiTextureType_DISPLACEMENT,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_DISPLACEMENT(),N)
 
 #define AI_MATKEY_TEXFLAGS_LIGHTMAP(N)  \
-    AI_MATKEY_TEXFLAGS(aiTextureType_LIGHTMAP,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_LIGHTMAP(),N)
 
 #define AI_MATKEY_TEXFLAGS_REFLECTION(N)    \
-    AI_MATKEY_TEXFLAGS(aiTextureType_REFLECTION,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_REFLECTION(),N)
 
 #define AI_MATKEY_TEXFLAGS_UNKNOWN(N)   \
-    AI_MATKEY_TEXFLAGS(aiTextureType_UNKNOWN,N)
+    AI_MATKEY_TEXFLAGS(aiTextureType_UNKNOWN(),N)
 
 //! @endcond
 //!
@@ -1342,7 +1378,7 @@ extern "C" {
 ASSIMP_API C_ENUM aiReturn aiGetMaterialProperty(
     const C_STRUCT aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int  index,
     const C_STRUCT aiMaterialProperty** pPropOut);
 
@@ -1355,7 +1391,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialProperty(
  * @code
  * aiUVTransform trafo;
  * unsigned int max = sizeof(aiUVTransform);
- * if (AI_SUCCESS != aiGetMaterialFloatArray(mat, AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE,0),
+ * if (AI_SUCCESS != aiGetMaterialFloatArray(mat, AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE(),0),
  *    (float*)&trafo, &max) || sizeof(aiUVTransform) != max)
  * {
  *   // error handling
@@ -1375,7 +1411,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialProperty(
 ASSIMP_API C_ENUM aiReturn aiGetMaterialFloatArray(
     const C_STRUCT aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     ai_real* pOut,
     unsigned int* pMax);
@@ -1404,10 +1440,13 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialFloatArray(
 // ---------------------------------------------------------------------------
 inline aiReturn aiGetMaterialFloat(const aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     ai_real* pOut)
 {
+    if (type == 0) {
+        type = "";
+    }
     return aiGetMaterialFloatArray(pMat,pKey,type,index,pOut,(unsigned int*)0x0);
 }
 
@@ -1427,7 +1466,7 @@ inline aiReturn aiGetMaterialFloat(const aiMaterial* pMat,
  * See the sample for aiGetMaterialFloatArray for more information.*/
 ASSIMP_API C_ENUM aiReturn aiGetMaterialIntegerArray(const C_STRUCT aiMaterial* pMat,
      const char* pKey,
-     unsigned int  type,
+    const char* type,
      unsigned int  index,
      int* pOut,
      unsigned int* pMax);
@@ -1442,10 +1481,13 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialIntegerArray(const C_STRUCT aiMaterial* 
 // ---------------------------------------------------------------------------
 inline aiReturn aiGetMaterialInteger(const C_STRUCT aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     int* pOut)
 {
+    if (type == 0) {
+        type = "";
+    }
     return aiGetMaterialIntegerArray(pMat,pKey,type,index,pOut,(unsigned int*)0x0);
 }
 
@@ -1466,7 +1508,7 @@ inline aiReturn aiGetMaterialInteger(const C_STRUCT aiMaterial* pMat,
 // ---------------------------------------------------------------------------
 ASSIMP_API C_ENUM aiReturn aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     C_STRUCT aiColor4D* pOut);
 
@@ -1478,7 +1520,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
 // ---------------------------------------------------------------------------
 ASSIMP_API C_ENUM aiReturn aiGetMaterialUVTransform(const C_STRUCT aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     C_STRUCT aiUVTransform* pOut);
 
@@ -1490,7 +1532,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialUVTransform(const C_STRUCT aiMaterial* p
 // ---------------------------------------------------------------------------
 ASSIMP_API C_ENUM aiReturn aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
     const char* pKey,
-    unsigned int type,
+    const char* type,
     unsigned int index,
     C_STRUCT aiString* pOut);
 
@@ -1569,7 +1611,388 @@ C_ENUM aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
 #ifdef __cplusplus
 }
 
-#include "material.inl"
+
+// ---------------------------------------------------------------------------
+inline aiPropertyTypeInfo ai_real_to_property_type_info(float)
+{
+    return aiPTI_Float;
+}
+
+inline aiPropertyTypeInfo ai_real_to_property_type_info(double)
+{
+    return aiPTI_Double;
+}
+// ---------------------------------------------------------------------------
+
+//! @cond never
+
+// because of std::map
+#ifdef __cplusplus
+// ---------------------------------------------------------------------------
+inline std::map<std::string, std::string> aiMaterial::GetAllTextures()
+{
+    std::map<std::string, std::string> textures_info;
+
+    for (unsigned int i = 0; i < this->mNumProperties; ++i) {
+        aiMaterialProperty* prop = this->mProperties[i];
+        if (this->GetTextureCount(prop->mSemantic.data) > 0) {
+            aiString path;
+            // For now only single layer textures
+            this->GetTexture(prop->mSemantic.data, 0, &path);
+            textures_info[prop->mSemantic.data] = path.data;
+        }
+    }
+
+    return textures_info;
+}
+#endif
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::GetTexture(aiTextureType type,
+    unsigned int  index,
+    C_STRUCT aiString* path,
+    aiTextureMapping* mapping    /*= NULL*/,
+    unsigned int* uvindex        /*= NULL*/,
+    ai_real* blend               /*= NULL*/,
+    aiTextureOp* op              /*= NULL*/,
+    aiTextureMapMode* mapmode    /*= NULL*/) const
+{
+    return ::aiGetMaterialTexture(this, type, index, path, mapping, uvindex, blend, op, mapmode);
+}
+
+// ---------------------------------------------------------------------------
+inline unsigned int aiMaterial::GetTextureCount(aiTextureType type) const
+{
+    return ::aiGetMaterialTextureCount(this, type);
+}
+
+// ---------------------------------------------------------------------------
+template <typename Type>
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, Type* pOut,
+    unsigned int* pMax) const
+{
+    unsigned int iNum = pMax ? *pMax : 1;
+
+    const aiMaterialProperty* prop;
+    const aiReturn ret = ::aiGetMaterialProperty(this, pKey, type, idx,
+        (const aiMaterialProperty**)&prop);
+    if (AI_SUCCESS == ret) {
+
+        if (prop->mDataLength < sizeof(Type)*iNum) {
+            return AI_FAILURE;
+        }
+
+        if (prop->mType != aiPTI_Buffer) {
+            return AI_FAILURE;
+        }
+
+        iNum = std::min((size_t)iNum, prop->mDataLength / sizeof(Type));
+        ::memcpy(pOut, prop->mData, iNum * sizeof(Type));
+        if (pMax) {
+            *pMax = iNum;
+        }
+    }
+    return ret;
+}
+
+// ---------------------------------------------------------------------------
+template <typename Type>
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, Type& pOut) const
+{
+    const aiMaterialProperty* prop;
+    const aiReturn ret = ::aiGetMaterialProperty(this, pKey, type, idx,
+        (const aiMaterialProperty**)&prop);
+    if (AI_SUCCESS == ret) {
+
+        if (prop->mDataLength < sizeof(Type)) {
+            return AI_FAILURE;
+        }
+
+        if (prop->mType != aiPTI_Buffer) {
+            return AI_FAILURE;
+        }
+
+        ::memcpy(&pOut, prop->mData, sizeof(Type));
+    }
+    return ret;
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, ai_real* pOut,
+    unsigned int* pMax) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return ::aiGetMaterialFloatArray(this, pKey, type, idx, pOut, pMax);
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, int* pOut,
+    unsigned int* pMax) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return ::aiGetMaterialIntegerArray(this, pKey, type, idx, pOut, pMax);
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, ai_real& pOut) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return aiGetMaterialFloat(this, pKey, type, idx, &pOut);
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, int& pOut) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return aiGetMaterialInteger(this, pKey, type, idx, &pOut);
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, aiColor4D& pOut) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return aiGetMaterialColor(this, pKey, type, idx, &pOut);
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, aiColor3D& pOut) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    aiColor4D c;
+    const aiReturn ret = aiGetMaterialColor(this, pKey, type, idx, &c);
+    pOut = aiColor3D(c.r, c.g, c.b);
+    return ret;
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, aiString& pOut) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return aiGetMaterialString(this, pKey, type, idx, &pOut);
+}
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::Get(const char* pKey, const char* type,
+    unsigned int idx, aiUVTransform& pOut) const
+{
+    if (type == 0) {
+        type = "";
+    }
+    return aiGetMaterialUVTransform(this, pKey, type, idx, &pOut);
+}
+
+//
+//// ---------------------------------------------------------------------------
+//template<class TYPE>
+//aiReturn aiMaterial::AddProperty (const TYPE* pInput,
+//    const unsigned int pNumValues,
+//    const char* pKey,
+//    const char* type,
+//    unsigned int index)
+//{
+//    return AddBinaryProperty((const void*)pInput,
+//        pNumValues * sizeof(TYPE),
+//        pKey,type,index,aiPTI_Buffer);
+//}
+
+// ------------------------------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const aiString* pInput,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    // We don't want to add the whole buffer .. write a 32 bit length
+    // prefix followed by the zero-terminated UTF8 string.
+    // (HACK) I don't want to break the ABI now, but we definitely
+    // ought to change aiString::mLength to uint32_t one day.
+    if (sizeof(size_t) == 8) {
+        aiString copy = *pInput;
+        uint32_t* s = reinterpret_cast<uint32_t*>(&copy.length);
+        s[1] = static_cast<uint32_t>(pInput->length);
+
+        return AddBinaryProperty(s + 1,
+            static_cast<unsigned int>(pInput->length + 1 + 4),
+            pKey,
+            type,
+            index,
+            aiPTI_String);
+    }
+    return AddBinaryProperty(pInput,
+        static_cast<unsigned int>(pInput->length + 1 + 4),
+        pKey,
+        type,
+        index,
+        aiPTI_String);
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const float* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(float),
+        pKey, type, index, aiPTI_Float);
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const double* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(double),
+        pKey, type, index, aiPTI_Double);
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const aiUVTransform* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(aiUVTransform),
+        pKey, type, index, ai_real_to_property_type_info(pInput->mRotation));
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const aiColor4D* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(aiColor4D),
+        pKey, type, index, ai_real_to_property_type_info(pInput->a));
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const aiColor3D* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(aiColor3D),
+        pKey, type, index, ai_real_to_property_type_info(pInput->b));
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const aiVector3D* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(aiVector3D),
+        pKey, type, index, ai_real_to_property_type_info(pInput->x));
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const int* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(int),
+        pKey, type, index, aiPTI_Integer);
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const unsigned int* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(unsigned int),
+        pKey, type, index, aiPTI_Integer);
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const bool* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(bool),
+        pKey, type, index, aiPTI_Integer);
+}
+
+// ---------------------------------------------------------------------------
+inline aiReturn aiMaterial::AddProperty(const aiTextureMapMode* pInput,
+    const unsigned int pNumValues,
+    const char* pKey,
+    const char* type = "",
+    unsigned int index = 0)
+{
+    if (type == 0) {
+        type = "";
+    }
+    return AddBinaryProperty((const void*)pInput,
+        pNumValues * sizeof(aiTextureMapMode),
+        pKey, type, index, aiPTI_Integer);
+}
 
 #endif //!__cplusplus
 

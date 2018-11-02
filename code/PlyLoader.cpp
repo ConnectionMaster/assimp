@@ -857,15 +857,15 @@ void PLYImporter::LoadMaterial(std::vector<aiMaterial*>* pvOut, std::string &def
 
       // build the diffuse material color
       GetMaterialColor((*i).alProperties, aaiPositions[0], aaiTypes[0], &clrOut);
-      pcHelper->AddProperty<aiColor4D>(&clrOut, 1, AI_MATKEY_COLOR_DIFFUSE);
+      pcHelper->AddProperty(&clrOut, 1, AI_MATKEY_COLOR_DIFFUSE);
 
       // build the specular material color
       GetMaterialColor((*i).alProperties, aaiPositions[1], aaiTypes[1], &clrOut);
-      pcHelper->AddProperty<aiColor4D>(&clrOut, 1, AI_MATKEY_COLOR_SPECULAR);
+      pcHelper->AddProperty(&clrOut, 1, AI_MATKEY_COLOR_SPECULAR);
 
       // build the ambient material color
       GetMaterialColor((*i).alProperties, aaiPositions[2], aaiTypes[2], &clrOut);
-      pcHelper->AddProperty<aiColor4D>(&clrOut, 1, AI_MATKEY_COLOR_AMBIENT);
+      pcHelper->AddProperty(&clrOut, 1, AI_MATKEY_COLOR_AMBIENT);
 
       // handle phong power and shading mode
       int iMode = (int)aiShadingMode_Gouraud;
@@ -877,17 +877,17 @@ void PLYImporter::LoadMaterial(std::vector<aiMaterial*>* pvOut, std::string &def
         if (fSpec)  {
           // scale this with 15 ... hopefully this is correct
           fSpec *= 15;
-          pcHelper->AddProperty<ai_real>(&fSpec, 1, AI_MATKEY_SHININESS);
+          pcHelper->AddProperty(&fSpec, 1, AI_MATKEY_SHININESS);
 
           iMode = (int)aiShadingMode_Phong;
         }
       }
-      pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+      pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
       // handle opacity
       if (0xFFFFFFFF != iOpacity) {
         ai_real fOpacity = PLY::PropertyInstance::ConvertTo<ai_real>(GetProperty((*i).alProperties, iPhong).avList.front(), eOpacity);
-        pcHelper->AddProperty<ai_real>(&fOpacity, 1, AI_MATKEY_OPACITY);
+        pcHelper->AddProperty(&fOpacity, 1, AI_MATKEY_OPACITY);
       }
 
       // The face order is absolutely undefined for PLY, so we have to
@@ -899,7 +899,7 @@ void PLYImporter::LoadMaterial(std::vector<aiMaterial*>* pvOut, std::string &def
       if (!defaultTexture.empty())
       {
         const aiString name(defaultTexture.c_str());
-        pcHelper->AddProperty(&name, _AI_MATKEY_TEXTURE_BASE, aiTextureType_DIFFUSE, 0);
+        pcHelper->AddProperty(&name, _AI_MATKEY_TEXTURE_BASE, aiTextureType_DIFFUSE(), 0);
       }
 
       if (!pointsOnly)
@@ -926,16 +926,16 @@ void PLYImporter::LoadMaterial(std::vector<aiMaterial*>* pvOut, std::string &def
 
     // fill in a default material
     int iMode = (int)aiShadingMode_Gouraud;
-    pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+    pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
     //generate white material most 3D engine just multiply ambient / diffuse color with actual ambient / light color
     aiColor3D clr;
     clr.b = clr.g = clr.r = 1.0f;
-    pcHelper->AddProperty<aiColor3D>(&clr, 1, AI_MATKEY_COLOR_DIFFUSE);
-    pcHelper->AddProperty<aiColor3D>(&clr, 1, AI_MATKEY_COLOR_SPECULAR);
+    pcHelper->AddProperty(&clr, 1, AI_MATKEY_COLOR_DIFFUSE);
+    pcHelper->AddProperty(&clr, 1, AI_MATKEY_COLOR_SPECULAR);
 
     clr.b = clr.g = clr.r = 1.0f;
-    pcHelper->AddProperty<aiColor3D>(&clr, 1, AI_MATKEY_COLOR_AMBIENT);
+    pcHelper->AddProperty(&clr, 1, AI_MATKEY_COLOR_AMBIENT);
 
     // The face order is absolutely undefined for PLY, so we have to
     // use two-sided rendering to be sure it's ok.
@@ -949,7 +949,7 @@ void PLYImporter::LoadMaterial(std::vector<aiMaterial*>* pvOut, std::string &def
     if (!defaultTexture.empty())
     {
       const aiString name(defaultTexture.c_str());
-      pcHelper->AddProperty(&name, _AI_MATKEY_TEXTURE_BASE, aiTextureType_DIFFUSE, 0);
+      pcHelper->AddProperty(&name, _AI_MATKEY_TEXTURE_BASE, aiTextureType_DIFFUSE(), 0);
     }
 
     //set to wireframe, so when using this material info we can switch to points rendering

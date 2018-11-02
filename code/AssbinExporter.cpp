@@ -579,7 +579,7 @@ protected:
         AssbinChunkWriter chunk( container, ASSBIN_CHUNK_AIMATERIALPROPERTY );
 
         Write<aiString>(&chunk,prop->mKey);
-        Write<unsigned int>(&chunk,prop->mSemantic);
+        Write<aiString>(&chunk,prop->mSemantic);
         Write<unsigned int>(&chunk,prop->mIndex);
 
         Write<unsigned int>(&chunk,prop->mDataLength);

@@ -565,7 +565,6 @@ void ValidateDSProcess::Validate( const aiAnimation* pAnimation)
 void ValidateDSProcess::SearchForInvalidTextures(const aiMaterial* pMaterial,
     aiTextureType type)
 {
-    const char* szType = TextureTypeToString(type);
 
     // ****************************************************************************
     // Search all keys of the material ...
@@ -578,7 +577,7 @@ void ValidateDSProcess::SearchForInvalidTextures(const aiMaterial* pMaterial,
     for (unsigned int i = 0; i < pMaterial->mNumProperties;++i)
     {
         aiMaterialProperty* prop = pMaterial->mProperties[i];
-        if (!::strcmp(prop->mKey.data,"$tex.file") && prop->mSemantic == type)  {
+        if (!::strcmp(prop->mKey.data,"$tex.file") && ::strcmp(prop->mSemantic.data, type) == 0)  {
             iIndex = std::max(iIndex, (int) prop->mIndex);
             ++iNumIndices;
 
@@ -588,7 +587,7 @@ void ValidateDSProcess::SearchForInvalidTextures(const aiMaterial* pMaterial,
     }
     if (iIndex +1 != iNumIndices)   {
         ReportError("%s #%i is set, but there are only %i %s textures",
-            szType,iIndex,iNumIndices,szType);
+            type,iIndex,iNumIndices,type);
     }
     if (!iNumIndices)return;
     std::vector<aiTextureMapping> mappings(iNumIndices);
@@ -598,13 +597,13 @@ void ValidateDSProcess::SearchForInvalidTextures(const aiMaterial* pMaterial,
     for (unsigned int i = 0; i < pMaterial->mNumProperties;++i)
     {
         aiMaterialProperty* prop = pMaterial->mProperties[i];
-        if (prop->mSemantic != type)continue;
+        if (::strcmp(prop->mSemantic.data, type) != 0)continue;
 
         if ((int)prop->mIndex >= iNumIndices)
         {
             ReportError("Found texture property with index %i, although there "
                 "are only %i textures of type %s",
-                prop->mIndex, iNumIndices, szType);
+                prop->mIndex, iNumIndices, type);
         }
 
         if (!::strcmp(prop->mKey.data,"$tex.mapping"))  {
@@ -749,17 +748,17 @@ void ValidateDSProcess::Validate( const aiMaterial* pMaterial)
     // Check whether there are invalid texture keys
     // TODO: that's a relict of the past, where texture type and index were baked
     // into the material string ... we could do that in one single pass.
-    SearchForInvalidTextures(pMaterial,aiTextureType_DIFFUSE);
-    SearchForInvalidTextures(pMaterial,aiTextureType_SPECULAR);
-    SearchForInvalidTextures(pMaterial,aiTextureType_AMBIENT);
-    SearchForInvalidTextures(pMaterial,aiTextureType_EMISSIVE);
-    SearchForInvalidTextures(pMaterial,aiTextureType_OPACITY);
-    SearchForInvalidTextures(pMaterial,aiTextureType_SHININESS);
-    SearchForInvalidTextures(pMaterial,aiTextureType_HEIGHT);
-    SearchForInvalidTextures(pMaterial,aiTextureType_NORMALS);
-    SearchForInvalidTextures(pMaterial,aiTextureType_DISPLACEMENT);
-    SearchForInvalidTextures(pMaterial,aiTextureType_LIGHTMAP);
-    SearchForInvalidTextures(pMaterial,aiTextureType_REFLECTION);
+    SearchForInvalidTextures(pMaterial,aiTextureType_DIFFUSE());
+    SearchForInvalidTextures(pMaterial,aiTextureType_SPECULAR());
+    SearchForInvalidTextures(pMaterial,aiTextureType_AMBIENT());
+    SearchForInvalidTextures(pMaterial,aiTextureType_EMISSIVE());
+    SearchForInvalidTextures(pMaterial,aiTextureType_OPACITY());
+    SearchForInvalidTextures(pMaterial,aiTextureType_SHININESS());
+    SearchForInvalidTextures(pMaterial,aiTextureType_HEIGHT());
+    SearchForInvalidTextures(pMaterial,aiTextureType_NORMALS());
+    SearchForInvalidTextures(pMaterial,aiTextureType_DISPLACEMENT());
+    SearchForInvalidTextures(pMaterial,aiTextureType_LIGHTMAP());
+    SearchForInvalidTextures(pMaterial,aiTextureType_REFLECTION());
 }
 
 // ------------------------------------------------------------------------------------------------

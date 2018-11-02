@@ -437,22 +437,22 @@ void AC3DImporter::ConvertMaterial(const Object& object,
         }
     }
 
-    matDest.AddProperty<aiColor3D>(&matSrc.rgb,1, AI_MATKEY_COLOR_DIFFUSE);
-    matDest.AddProperty<aiColor3D>(&matSrc.amb,1, AI_MATKEY_COLOR_AMBIENT);
-    matDest.AddProperty<aiColor3D>(&matSrc.emis,1,AI_MATKEY_COLOR_EMISSIVE);
-    matDest.AddProperty<aiColor3D>(&matSrc.spec,1,AI_MATKEY_COLOR_SPECULAR);
+    matDest.AddProperty(&matSrc.rgb,1, AI_MATKEY_COLOR_DIFFUSE);
+    matDest.AddProperty(&matSrc.amb,1, AI_MATKEY_COLOR_AMBIENT);
+    matDest.AddProperty(&matSrc.emis,1,AI_MATKEY_COLOR_EMISSIVE);
+    matDest.AddProperty(&matSrc.spec,1,AI_MATKEY_COLOR_SPECULAR);
 
     int n;
     if (matSrc.shin)
     {
         n = aiShadingMode_Phong;
-        matDest.AddProperty<float>(&matSrc.shin,1,AI_MATKEY_SHININESS);
+        matDest.AddProperty(&matSrc.shin,1,AI_MATKEY_SHININESS);
     }
     else n = aiShadingMode_Gouraud;
-    matDest.AddProperty<int>(&n,1,AI_MATKEY_SHADING_MODEL);
+    matDest.AddProperty(&n,1,AI_MATKEY_SHADING_MODEL);
 
     float f = 1.f - matSrc.trans;
-    matDest.AddProperty<float>(&f,1,AI_MATKEY_OPACITY);
+    matDest.AddProperty(&f,1,AI_MATKEY_OPACITY);
 }
 
 // ------------------------------------------------------------------------------------------------

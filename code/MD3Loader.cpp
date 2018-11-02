@@ -315,23 +315,23 @@ void Q3Shader::ConvertShaderToMaterial(aiMaterial* out, const ShaderDataBlock& s
                 out->AddProperty(&additive,1,AI_MATKEY_BLEND_FUNC);
 
                 index = cur_diffuse++;
-                type  = aiTextureType_DIFFUSE;
+                type  = aiTextureType_DIFFUSE();
             }
             else {
                 index = cur_emissive++;
-                type  = aiTextureType_EMISSIVE;
+                type  = aiTextureType_EMISSIVE();
             }
         }
         else if ((*it).blend_src == Q3Shader::BLEND_GL_DST_COLOR && (*it).blend_dest == Q3Shader::BLEND_GL_ZERO) {
             index = cur_lm++;
-            type  = aiTextureType_LIGHTMAP;
+            type  = aiTextureType_LIGHTMAP();
         }
         else {
             const int blend = aiBlendMode_Default;
             out->AddProperty(&blend,1,AI_MATKEY_BLEND_FUNC);
 
             index = cur_diffuse++;
-            type  = aiTextureType_DIFFUSE;
+            type  = aiTextureType_DIFFUSE();
         }
 
         // setup texture
@@ -924,16 +924,16 @@ void MD3Importer::InternReadFile( const std::string& pFile,
         aiMaterial* pcHelper = new aiMaterial();
 
         const int iMode = (int)aiShadingMode_Gouraud;
-        pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+        pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
         // Add a small ambient color value - Quake 3 seems to have one
         aiColor3D clr;
         clr.b = clr.g = clr.r = 0.05f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 
         clr.b = clr.g = clr.r = 1.0f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
         // use surface name + skin_name as material name
         aiString name;

@@ -233,7 +233,7 @@ private:
     aiString GetTexturePath(const Texture* tex);
 
     // ------------------------------------------------------------------------------------------------
-    void TrySetTextureProperties(aiMaterial* out_mat, const TextureMap& textures,
+    void TrySetTextureProperties(aiMaterial* out_mat, const Texture *textures,
         const std::string& propName,
         aiTextureType target, const MeshGeometry* const mesh);
 

@@ -73,9 +73,11 @@ void EmbedTexturesProcess::Execute(aiScene* pScene) {
 
     for (auto matId = 0u; matId < pScene->mNumMaterials; ++matId) {
         auto material = pScene->mMaterials[matId];
+        
+        for (unsigned int i = 0; i < material->mNumProperties; ++i) {
+            aiMaterialProperty* prop = material->mProperties[i];
+            aiTextureType tt = prop->mSemantic.data;
 
-        for (auto ttId = 1u; ttId < AI_TEXTURE_TYPE_MAX; ++ttId) {
-            auto tt = static_cast<aiTextureType>(ttId);
             auto texturesCount = material->GetTextureCount(tt);
 
             for (auto texId = 0u; texId < texturesCount; ++texId) {

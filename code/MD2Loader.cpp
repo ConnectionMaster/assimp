@@ -325,7 +325,7 @@ void MD2Importer::InternReadFile( const std::string& pFile,
     // but a texture can't be there without a valid UV channel
     aiMaterial* pcHelper = (aiMaterial*)pScene->mMaterials[0];
     const int iMode = (int)aiShadingMode_Gouraud;
-    pcHelper->AddProperty<int>(&iMode, 1, AI_MATKEY_SHADING_MODEL);
+    pcHelper->AddProperty(&iMode, 1, AI_MATKEY_SHADING_MODEL);
 
     if (m_pcHeader->numTexCoords && m_pcHeader->numSkins)
     {
@@ -335,11 +335,11 @@ void MD2Importer::InternReadFile( const std::string& pFile,
 
         aiColor3D clr;
         clr.b = clr.g = clr.r = 1.0f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
         clr.b = clr.g = clr.r = 0.05f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 
         if (pcSkins->name[0])
         {
@@ -359,11 +359,11 @@ void MD2Importer::InternReadFile( const std::string& pFile,
         // apply a default material
         aiColor3D clr;
         clr.b = clr.g = clr.r = 0.6f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_DIFFUSE);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_SPECULAR);
 
         clr.b = clr.g = clr.r = 0.05f;
-        pcHelper->AddProperty<aiColor3D>(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
+        pcHelper->AddProperty(&clr, 1,AI_MATKEY_COLOR_AMBIENT);
 
         aiString szName;
         szName.Set(AI_DEFAULT_MATERIAL_NAME);

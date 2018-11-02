@@ -199,7 +199,7 @@ void UpdateUVIndex(const std::list<TTUpdateInfo>& l, unsigned int n)
             *info.directShortcut = n;
         else if (!n)
         {
-            info.mat->AddProperty<int>((int*)&n,1,AI_MATKEY_UVWSRC(info.semantic,info.index));
+            info.mat->AddProperty((int*)&n,1,AI_MATKEY_UVWSRC(info.semantic.data,info.index));
         }
     }
 }

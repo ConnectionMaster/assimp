@@ -418,19 +418,19 @@ int Assimp_Info (const char* const* params, unsigned int num)
 	for(unsigned int i = 0;i < scene->mNumMaterials; ++i) {
 		aiString name;
 		static const aiTextureType types[] = {
-			aiTextureType_NONE,
-			aiTextureType_DIFFUSE,
-			aiTextureType_SPECULAR,
-			aiTextureType_AMBIENT,
-			aiTextureType_EMISSIVE,
-			aiTextureType_HEIGHT,
-			aiTextureType_NORMALS,
-			aiTextureType_SHININESS,
-			aiTextureType_OPACITY,
-			aiTextureType_DISPLACEMENT,
-			aiTextureType_LIGHTMAP,
-			aiTextureType_REFLECTION,
-			aiTextureType_UNKNOWN
+			aiTextureType_NONE(),
+			aiTextureType_DIFFUSE(),
+			aiTextureType_SPECULAR(),
+			aiTextureType_AMBIENT(),
+			aiTextureType_EMISSIVE(),
+			aiTextureType_HEIGHT(),
+			aiTextureType_NORMALS(),
+			aiTextureType_SHININESS(),
+			aiTextureType_OPACITY(),
+			aiTextureType_DISPLACEMENT(),
+			aiTextureType_LIGHTMAP(),
+			aiTextureType_REFLECTION(),
+			aiTextureType_UNKNOWN()
 		};
 		for(unsigned int type = 0; type < sizeof(types)/sizeof(types[0]); ++type) {
 			for(unsigned int idx = 0;AI_SUCCESS==aiGetMaterialString(scene->mMaterials[i],

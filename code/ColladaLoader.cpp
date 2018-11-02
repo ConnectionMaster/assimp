@@ -1601,15 +1601,15 @@ void ColladaLoader::FillMaterials( const ColladaParser& pParser, aiScene* /*pSce
                 break;
             }
         }
-        mat.AddProperty<int>( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
+        mat.AddProperty( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
 
         // double-sided?
         shadeMode = effect.mDoubleSided;
-        mat.AddProperty<int>( &shadeMode, 1, AI_MATKEY_TWOSIDED);
+        mat.AddProperty( &shadeMode, 1, AI_MATKEY_TWOSIDED);
 
         // wireframe?
         shadeMode = effect.mWireframe;
-        mat.AddProperty<int>( &shadeMode, 1, AI_MATKEY_ENABLE_WIREFRAME);
+        mat.AddProperty( &shadeMode, 1, AI_MATKEY_ENABLE_WIREFRAME);
 
         // add material colors
         mat.AddProperty( &effect.mAmbient, 1,AI_MATKEY_COLOR_AMBIENT);
@@ -1657,26 +1657,26 @@ void ColladaLoader::FillMaterials( const ColladaParser& pParser, aiScene* /*pSce
         // add textures, if given
         if (!effect.mTexAmbient.mName.empty()) {
             // It is merely a light-map
-            AddTexture(mat, pParser, effect, effect.mTexAmbient, aiTextureType_LIGHTMAP);
+            AddTexture(mat, pParser, effect, effect.mTexAmbient, aiTextureType_LIGHTMAP());
         }
 
         if( !effect.mTexEmissive.mName.empty())
-            AddTexture( mat, pParser, effect, effect.mTexEmissive, aiTextureType_EMISSIVE);
+            AddTexture( mat, pParser, effect, effect.mTexEmissive, aiTextureType_EMISSIVE());
 
         if( !effect.mTexSpecular.mName.empty())
-            AddTexture( mat, pParser, effect, effect.mTexSpecular, aiTextureType_SPECULAR);
+            AddTexture( mat, pParser, effect, effect.mTexSpecular, aiTextureType_SPECULAR());
 
         if( !effect.mTexDiffuse.mName.empty())
-            AddTexture( mat, pParser, effect, effect.mTexDiffuse, aiTextureType_DIFFUSE);
+            AddTexture( mat, pParser, effect, effect.mTexDiffuse, aiTextureType_DIFFUSE());
 
         if( !effect.mTexBump.mName.empty())
-            AddTexture( mat, pParser, effect, effect.mTexBump, aiTextureType_NORMALS);
+            AddTexture( mat, pParser, effect, effect.mTexBump, aiTextureType_NORMALS());
 
         if( !effect.mTexTransparent.mName.empty())
-            AddTexture( mat, pParser, effect, effect.mTexTransparent, aiTextureType_OPACITY);
+            AddTexture( mat, pParser, effect, effect.mTexTransparent, aiTextureType_OPACITY());
 
         if( !effect.mTexReflective.mName.empty())
-            AddTexture( mat, pParser, effect, effect.mTexReflective, aiTextureType_REFLECTION);
+            AddTexture( mat, pParser, effect, effect.mTexReflective, aiTextureType_REFLECTION());
     }
 }
 
@@ -1715,7 +1715,7 @@ void ColladaLoader::BuildMaterials( ColladaParser& pParser, aiScene* /*pScene*/)
         mat->AddProperty( &name, AI_MATKEY_NAME);
 
         const int shadeMode = aiShadingMode_Phong;
-        mat->AddProperty<int>( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
+        mat->AddProperty( &shadeMode, 1, AI_MATKEY_SHADING_MODEL);
         aiColor4D colAmbient( 0.2, 0.2, 0.2, 1.0), colDiffuse( 0.8, 0.8, 0.8, 1.0), colSpecular( 0.5, 0.5, 0.5, 0.5);
         mat->AddProperty( &colAmbient, 1, AI_MATKEY_COLOR_AMBIENT);
         mat->AddProperty( &colDiffuse, 1, AI_MATKEY_COLOR_DIFFUSE);

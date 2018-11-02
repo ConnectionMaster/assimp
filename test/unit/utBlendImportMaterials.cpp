@@ -136,12 +136,12 @@ TEST_F(BlendImportMaterials, testImportMaterialwith2texturesAnd2TexCoordMappings
     EXPECT_EQ(1, pTest->mNumMaterials);
     const aiMaterial *pMat = pTest->mMaterials[0];
     ASSERT_TRUE(nullptr != pMat);
-    ASSERT_EQ(2, pMat->GetTextureCount(aiTextureType_DIFFUSE));
+    ASSERT_EQ(2, pMat->GetTextureCount(aiTextureType_DIFFUSE()));
     aiString aPath;
     aiTextureMapping tm = aiTextureMapping::aiTextureMapping_OTHER;
-    aiReturn result = pMat->GetTexture(aiTextureType_DIFFUSE, 0, &aPath, &tm);
+    aiReturn result = pMat->GetTexture(aiTextureType_DIFFUSE(), 0, &aPath, &tm);
     ASSERT_EQ(aiReturn_SUCCESS, result);
-    result = pMat->GetTexture(aiTextureType_DIFFUSE, 1, &aPath, &tm);
+    result = pMat->GetTexture(aiTextureType_DIFFUSE(), 1, &aPath, &tm);
     ASSERT_EQ(aiReturn_SUCCESS, result);
 
     // mesh has 2 texturecoord sets

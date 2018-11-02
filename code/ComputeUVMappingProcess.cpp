@@ -415,7 +415,7 @@ void ComputeUVMappingProcess::Execute( aiScene* pScene)
                     if (!DefaultLogger::isNullLogger())
                     {
                         ai_snprintf(buffer, 1024, "Found non-UV mapped texture (%s,%u). Mapping type: %s",
-                            TextureTypeToString((aiTextureType)prop->mSemantic),prop->mIndex,
+                            prop->mSemantic.data,prop->mIndex,
                             MappingTypeToString(mapping));
 
                         ASSIMP_LOG_INFO(buffer);
@@ -497,7 +497,7 @@ void ComputeUVMappingProcess::Execute( aiScene* pScene)
 
                     // Update the material property list
                     mapping = aiTextureMapping_UV;
-                    ((aiMaterial*)mat)->AddProperty(&idx,1,AI_MATKEY_UVWSRC(prop->mSemantic,prop->mIndex));
+                    ((aiMaterial*)mat)->AddProperty(&idx,1,AI_MATKEY_UVWSRC(prop->mSemantic.data,prop->mIndex));
                 }
             }
         }

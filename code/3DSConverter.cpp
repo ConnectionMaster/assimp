@@ -201,12 +201,12 @@ void CopyTexture(aiMaterial& mat, D3DS::Texture& texture, aiTextureType type)
 
     // Setup the texture blend factor
     if (is_not_qnan(texture.mTextureBlend))
-        mat.AddProperty<ai_real>( &texture.mTextureBlend, 1, AI_MATKEY_TEXBLEND(type,0));
+        mat.AddProperty( &texture.mTextureBlend, 1, AI_MATKEY_TEXBLEND(type,0));
 
     // Setup the texture mapping mode
     int mapMode = static_cast<int>(texture.mMapMode);
-    mat.AddProperty<int>(&mapMode,1,AI_MATKEY_MAPPINGMODE_U(type,0));
-    mat.AddProperty<int>(&mapMode,1,AI_MATKEY_MAPPINGMODE_V(type,0));
+    mat.AddProperty(&mapMode,1,AI_MATKEY_MAPPINGMODE_U(type,0));
+    mat.AddProperty(&mapMode,1,AI_MATKEY_MAPPINGMODE_V(type,0));
 
     // Mirroring - double the scaling values
     // FIXME: this is not really correct ...
@@ -219,7 +219,7 @@ void CopyTexture(aiMaterial& mat, D3DS::Texture& texture, aiTextureType type)
     }
 
     // Setup texture UV transformations
-    mat.AddProperty<ai_real>(&texture.mOffsetU,5,AI_MATKEY_UVTRANSFORM(type,0));
+    mat.AddProperty(&texture.mOffsetU,5,AI_MATKEY_UVTRANSFORM(type,0));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -270,16 +270,16 @@ void Discreet3DSImporter::ConvertMaterial(D3DS::Material& oldMat,
     }
 
     // Opacity
-    mat.AddProperty<ai_real>( &oldMat.mTransparency,1,AI_MATKEY_OPACITY);
+    mat.AddProperty( &oldMat.mTransparency,1,AI_MATKEY_OPACITY);
 
     // Bump height scaling
-    mat.AddProperty<ai_real>( &oldMat.mBumpHeight,1,AI_MATKEY_BUMPSCALING);
+    mat.AddProperty( &oldMat.mBumpHeight,1,AI_MATKEY_BUMPSCALING);
 
     // Two sided rendering?
     if (oldMat.mTwoSided)
     {
         int i = 1;
-        mat.AddProperty<int>(&i,1,AI_MATKEY_TWOSIDED);
+        mat.AddProperty(&i,1,AI_MATKEY_TWOSIDED);
     }
 
     // Shading mode
@@ -295,7 +295,7 @@ void Discreet3DSImporter::ConvertMaterial(D3DS::Material& oldMat,
             {
                 // Set the wireframe flag
                 unsigned int iWire = 1;
-                mat.AddProperty<int>( (int*)&iWire,1,AI_MATKEY_ENABLE_WIREFRAME);
+                mat.AddProperty( (int*)&iWire,1,AI_MATKEY_ENABLE_WIREFRAME);
             }
 
         case D3DS::Discreet3DS::Gouraud:
@@ -315,35 +315,35 @@ void Discreet3DSImporter::ConvertMaterial(D3DS::Material& oldMat,
             eShading = aiShadingMode_Blinn; break;
     }
     int eShading_ = static_cast<int>(eShading);
-    mat.AddProperty<int>(&eShading_, 1, AI_MATKEY_SHADING_MODEL);
+    mat.AddProperty(&eShading_, 1, AI_MATKEY_SHADING_MODEL);
 
     // DIFFUSE texture
     if( oldMat.sTexDiffuse.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexDiffuse, aiTextureType_DIFFUSE);
+        CopyTexture(mat,oldMat.sTexDiffuse, aiTextureType_DIFFUSE());
 
     // SPECULAR texture
     if( oldMat.sTexSpecular.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexSpecular, aiTextureType_SPECULAR);
+        CopyTexture(mat,oldMat.sTexSpecular, aiTextureType_SPECULAR());
 
     // OPACITY texture
     if( oldMat.sTexOpacity.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexOpacity, aiTextureType_OPACITY);
+        CopyTexture(mat,oldMat.sTexOpacity, aiTextureType_OPACITY());
 
     // EMISSIVE texture
     if( oldMat.sTexEmissive.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexEmissive, aiTextureType_EMISSIVE);
+        CopyTexture(mat,oldMat.sTexEmissive, aiTextureType_EMISSIVE());
 
     // BUMP texture
     if( oldMat.sTexBump.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexBump, aiTextureType_HEIGHT);
+        CopyTexture(mat,oldMat.sTexBump, aiTextureType_HEIGHT());
 
     // SHININESS texture
     if( oldMat.sTexShininess.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexShininess, aiTextureType_SHININESS);
+        CopyTexture(mat,oldMat.sTexShininess, aiTextureType_SHININESS());
 
     // REFLECTION texture
     if( oldMat.sTexReflective.mMapName.length() > 0)
-        CopyTexture(mat,oldMat.sTexReflective, aiTextureType_REFLECTION);
+        CopyTexture(mat,oldMat.sTexReflective, aiTextureType_REFLECTION());
 
     // Store the name of the material itself, too
     if( oldMat.mName.length())  {
