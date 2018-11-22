@@ -2999,10 +2999,22 @@ void FBXConverter::ConvertScaleKeys( aiNodeAnim* na, const std::vector<const Ani
     const KeyFrameListList& inputs = GetKeyframeList( nodes, start, stop );
     const KeyTimeList& keys = GetKeyTimeList( inputs );
 
+    aiVector3D default_vals(1.0f, 1.0f, 1.0f);
+
+    for (const auto& node : nodes) {
+        default_vals.x = PropertyGet<float>(node->Props(), "d|X", 0.f);
+        default_vals.y = PropertyGet<float>(node->Props(), "d|Y", 0.f);
+        default_vals.z = PropertyGet<float>(node->Props(), "d|Z", 0.f);
+        // Based on FBX SDK UML class diagram, each curve node can have
+        // one and only one fbx property associated with it
+        break;
+    }
+
+
     na->mNumScalingKeys = static_cast<unsigned int>( keys.size() );
     na->mScalingKeys = new aiVectorKey[ keys.size() ];
     if ( keys.size() > 0 )
-        InterpolateKeys( na->mScalingKeys, keys, inputs, aiVector3D( 1.0f, 1.0f, 1.0f ), maxTime, minTime );
+        InterpolateKeys( na->mScalingKeys, keys, inputs, default_vals, maxTime, minTime );
 }
 
 void FBXConverter::ConvertTranslationKeys( aiNodeAnim* na, const std::vector<const AnimationCurveNode*>& nodes,
@@ -3017,10 +3029,21 @@ void FBXConverter::ConvertTranslationKeys( aiNodeAnim* na, const std::vector<con
     const KeyFrameListList& inputs = GetKeyframeList( nodes, start, stop );
     const KeyTimeList& keys = GetKeyTimeList( inputs );
 
+    aiVector3D default_vals(0.0f, 0.0f, 0.0f);
+
+    for (const auto& node: nodes) {
+        default_vals.x = PropertyGet<float>(node->Props(), "d|X", 0.f);
+        default_vals.y = PropertyGet<float>(node->Props(), "d|Y", 0.f);
+        default_vals.z = PropertyGet<float>(node->Props(), "d|Z", 0.f);
+        // Based on FBX SDK UML class diagram, each curve node can have
+        // one and only one fbx property associated with it
+        break;
+    }
+
     na->mNumPositionKeys = static_cast<unsigned int>( keys.size() );
     na->mPositionKeys = new aiVectorKey[ keys.size() ];
     if ( keys.size() > 0 )
-        InterpolateKeys( na->mPositionKeys, keys, inputs, aiVector3D( 0.0f, 0.0f, 0.0f ), maxTime, minTime );
+        InterpolateKeys( na->mPositionKeys, keys, inputs, default_vals, maxTime, minTime );
 }
 
 void FBXConverter::ConvertRotationKeys( aiNodeAnim* na, const std::vector<const AnimationCurveNode*>& nodes,
@@ -3036,10 +3059,22 @@ void FBXConverter::ConvertRotationKeys( aiNodeAnim* na, const std::vector<const 
     const std::vector< KeyFrameList >& inputs = GetKeyframeList( nodes, start, stop );
     const KeyTimeList& keys = GetKeyTimeList( inputs );
 
+    aiVector3D default_vals(0.0f, 0.0f, 0.0f);
+
+    for (const auto& node : nodes) {
+        default_vals.x = PropertyGet<float>(node->Props(), "d|X", 0.f);
+        default_vals.y = PropertyGet<float>(node->Props(), "d|Y", 0.f);
+        default_vals.z = PropertyGet<float>(node->Props(), "d|Z", 0.f);
+        // Based on FBX SDK UML class diagram, each curve node can have
+        // one and only one fbx property associated with it
+        break;
+    }
+
+
     na->mNumRotationKeys = static_cast<unsigned int>( keys.size() );
     na->mRotationKeys = new aiQuatKey[ keys.size() ];
     if (!keys.empty()) {
-        InterpolateKeys(na->mRotationKeys, keys, inputs, aiVector3D(0.0f, 0.0f, 0.0f), maxTime, minTime, order);
+        InterpolateKeys(na->mRotationKeys, keys, inputs, default_vals, maxTime, minTime, order);
     }
 }
 
