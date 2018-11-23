@@ -316,8 +316,14 @@ void FBXConverter::ConvertLight( const Light& light, const std::string &orig_nam
 
     //lights are defined along negative y direction
     out_light->mPosition = aiVector3D(0.0f);
-    out_light->mDirection = aiVector3D(0.0f, -1.0f, 0.0f);
-    out_light->mUp = aiVector3D(0.0f, 0.0f, -1.0f);
+    // Assimp original values
+    //out_light->mDirection = aiVector3D(0.0f, -1.0f, 0.0f);
+    //out_light->mUp = aiVector3D(0.0f, 0.0f, -1.0f);
+
+    // This is to ensure we don't break backward compatibility for our converter
+    out_light->mDirection = aiVector3D(0.0f, 0.0f, 1.0f);
+    out_light->mUp = aiVector3D(0.0f, 1.0f, 0.0f);
+
 
     switch ( light.LightType() )
     {
