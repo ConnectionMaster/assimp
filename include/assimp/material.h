@@ -236,7 +236,7 @@ inline const char *aiTextureType_HEIGHT() { return "height"; }
     *  normal maps. Assimp does (intentionally) not
     *  distinguish here.
     */
-inline const char *aiTextureType_NORMALS() { return "normals"; }
+inline const char *aiTextureType_NORMALS() { return "normal"; }
 
 /** The texture defines the glossiness of the material.
     *
