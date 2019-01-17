@@ -358,7 +358,7 @@ void FBXConverter::ConvertLight( const Light& light, const std::string &orig_nam
     switch ( light.DecayType() )
     {
     case Light::Decay_None:
-        out_light->mAttenuationConstant = decay;
+        out_light->mAttenuationConstant = 1.0;
         out_light->mAttenuationLinear = 0.0f;
         out_light->mAttenuationQuadratic = 0.0f;
         break;
