@@ -355,6 +355,10 @@ void FBXConverter::ConvertLight( const Light& light, const std::string &orig_nam
     }
 
     float decay = light.DecayStart();
+    if (decay == 0.0) {
+        decay = 1.0;
+    }
+
     switch ( light.DecayType() )
     {
     case Light::Decay_None:
